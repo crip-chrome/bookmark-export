@@ -1,15 +1,6 @@
+import { App } from './App';
 
-class App {
-
-    defaultApiUrl: string;
-
-    constructor() {
-        this.defaultApiUrl = 'http://crip.lv/api/chrome-bookmarks';
-    }
-
-    run() {
-        
-    }
-}
-
-new App();
+window.addEventListener('load', (evt) => {
+    let app = new App();
+    app.run();
+})

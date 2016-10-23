@@ -38,13 +38,6 @@ cripweb(gulp, 'settings.json')(function (crip) {
     });
 
     // now we can define our webpack configuration
-    crip.webpack('typescripts', 'src/typings/**/*.ts');
-
-    crip.scripts('popup', [
-        'Status.js',
-        'Storage.js',
-        'SettingsForm.js',
-        'Bookmarks.js',
-        '_root.js'], true);
+    crip.webpack('typescripts', 'src/typings/*.ts');
     crip.watch('sass', 'src/sass/*.scss', 'sass');
 });
