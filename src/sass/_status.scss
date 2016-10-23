@@ -1,0 +1,11 @@
+#status {
+    font-weight: bold;
+    padding-bottom: 10px;
+
+    &.error {
+        color: #ef5350;
+    }
+    &.success {
+        color: #00b19d;
+    }
+}

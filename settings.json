@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "base": "src/js",
+        "output": ""
+    }
+}
