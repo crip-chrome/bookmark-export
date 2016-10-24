@@ -11,10 +11,12 @@ function SettingsForm(formId, status, storage, inputId) {
     this.status = status;
     this.storage = storage;
 
-    this.formElement.addEventListener('submit', this.saveUserSettings);
-    this.storage.getApiUrl(function (value) {
-        self.inputElement.value = value;
-    });
+    this.formElement.addEventListener('submit', this.saveUserSettings.bind(self));
+    this.storage.getApiUrl(this.setUrlValue.bind(this));
+}
+
+SettingsForm.prototype.setUrlValue = function (value) {
+    this.inputElement.value = value;
 }
 
 SettingsForm.prototype.saveUserSettings = function (e) {
@@ -28,5 +30,5 @@ SettingsForm.prototype.saveUserSettings = function (e) {
         return;
     }
 
-    this.storage.saveApiUrl(value);
+    this.storage.saveApiUrl(url);
 }

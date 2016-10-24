@@ -9,11 +9,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+  },
+  "devDependencies": {
     "cripweb": "^3.1.6",
-    "cripweb-webpack": "^1.0.0",
     "gulp": "^3.9.1",
-    "gulp-sass": "^2.3.2",
-    "ts-loader": "^0.9.5",
-    "typescript": "^2.0.3"
+    "gulp-sass": "^2.3.2"
   }
 }
