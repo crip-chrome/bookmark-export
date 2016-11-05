@@ -8,19 +8,44 @@
 </head>
 
 <body>
-	<h4>CRIP chrome bookmark export</h4>
-	<form id="app-settings">
-		<div class="form-group">
-			<label class="control-label col-2">API url</label>
-			<div class="col-10">
-				<input type="text" name="ApiUrl" id="api-url" class="form-control" />
+
+	<nav>
+		<h4 class="pull-left">CRIP chrome bookmark export</h4>
+		<button id="change-view" class="btn btn-purple pull-right">Settings</button>
+	</nav>
+
+	<div class="clearfix">
+
+		<form id="app-settings" style="display: none">
+			<h5>Settings</h5>
+
+			<div class="form-group">
+				<label class="control-label col-2">API url</label>
+				<div class="col-10">
+					<input type="text" id="api-url" class="form-control" />
+				</div>
 			</div>
-		</div>
 
-		<div id="status"></div>
+			<div class="form-group">
+				<label class="control-label col-2">API key</label>
+				<div class="col-10">
+					<input type="text" id="api-key" class="form-control" />
+				</div>
+			</div>
 
-		<button type="submit" class="btn btn-purple">Save</button>
-	</form>
+			<div id="status"></div>
+
+			<button type="submit" class="btn btn-purple">Save</button>
+		</form>
+
+		<form id="app">
+			<h5>Management</h5>
+
+			<p>Some management stuff here</p>
+		</form>
+
+	</div>
+
 </body>
 
 </html>

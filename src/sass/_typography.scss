@@ -1,6 +1,6 @@
 body {
     font-family: 'Roboto', sans-serif;
-    color: #98a6ad;
+    color: $text-color;
     font-size: 14px;
     line-height: 1.42857143;
 }
@@ -10,6 +10,18 @@ h4 {
     font-size: 18px;
     font-weight: 500;
     font-family: 'Source Sans Pro', sans-serif;
-    color: rgba(255, 255, 255, 0.8);
+    color: $text-color-light;
     margin: 10px 0;
+}
+
+.pull-right {
+    float: right;
+}
+
+.pull-left {
+    float: left;
+}
+
+.clearfix {
+    clear: both;
 }

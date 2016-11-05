@@ -3,9 +3,9 @@
     padding-bottom: 10px;
 
     &.error {
-        color: #ef5350;
+        color: $text-danger;
     }
     &.success {
-        color: #00b19d;
+        color: $text-success;
     }
 }

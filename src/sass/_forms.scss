@@ -23,10 +23,10 @@ input {
 }
 
     .form-control {
-        background-color: #323b44;
+        background-color: $bg;
         border: 2px solid rgba(238, 238, 238, 0.1);
         border-radius: 4px;
-        color: #D1D2D4;
+        color: $text-color-light;
         height: 36px;
         max-width: 100%;
         display: block;

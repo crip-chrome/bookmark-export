@@ -1,30 +1,44 @@
-
-function Storage(status, defaultApiUrl) {
+/**
+ * Initialize new Storage instance 
+ * 
+ * @param {Status} status
+ */
+function Storage(status) {
     this.status = status;
-    this.defaultApiUrl = defaultApiUrl;
 }
 
-Storage.prototype.saveApiUrl = function (value) {
+/**
+ * Save variable to chrome storage
+ * 
+ * @param {String} key
+ * @param {String} value
+ * @param {function} onComplete
+ */
+Storage.prototype.set = function (key, value, onComplete) {
     var self = this;
-    chrome.storage.sync.set({ 'crip_api_url': value }, function () {
+    var obj = {}; obj[key] = value;
+    chrome.storage.sync.set(obj, function () {
         if (chrome.runtime.error) {
-            self.status.error('Storage runtime error.');
+            onComplete(false, key);
             return;
         }
 
-        self.status.success('API url successfully updated.');
+        onComplete(true, key);
     })
 }
 
-Storage.prototype.getApiUrl = function (cb) {
-    var result = this.defaultApiUrl;
-    chrome.storage.sync.get('crip_api_url', function (data) {
-        if (chrome.runtime.error) {
-            cb(result);
-        }
+/**
+ * Asynchronously get variable from chrome storage
+ * 
+ * @param {String} key
+ * @param {function} cb Callback where value will be accessible
+ * @param {?String} defaultValue
+ */
+Storage.prototype.get = function (key, cb, defaultValue) {
+    chrome.storage.sync.get(key, function (data) {
+        if (chrome.runtime.error) 
+            cb(defaultValue || '');
 
-        cb(data.crip_api_url);
+        cb(data[key]);
     });
-
-    cb(result);
 }
