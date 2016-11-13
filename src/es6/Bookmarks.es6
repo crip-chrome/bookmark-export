@@ -50,7 +50,7 @@ export class Bookmarks {
      */
     onChanged(id, bookmark) {
         bookmark.id = id;
-        this._sendDataToApi('changed', bookmark);
+        this._sendDataToApi('edited', bookmark);
     }
 
     /**
@@ -65,7 +65,7 @@ export class Bookmarks {
      */
     onMoved(id, bookmark) {
         bookmark.id = id;
-        this._sendDataToApi('moved', bookmark);
+        this._sendDataToApi('changed-position', bookmark);
     }
 
     /**
@@ -84,7 +84,7 @@ export class Bookmarks {
      */
     onRemoved(id, bookmark) {
         bookmark.id = bookmark.node.id;
-        this._sendDataToApi('removed', bookmark);
+        this._sendDataToApi('moved-away', bookmark);
     }
 
     _sendDataToApi(interactionName, data) {
