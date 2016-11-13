@@ -4,7 +4,10 @@
   "description": "This extension exports bookmarks to your API endpoint",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "build-release": "webpack --minimize",
+    "dev": "webpack --watch"
   },
   "author": "tahq69",
   "license": "MIT",

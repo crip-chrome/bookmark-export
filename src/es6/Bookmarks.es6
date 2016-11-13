@@ -87,7 +87,6 @@ export class Bookmarks {
 
     _sendDataToApi(interactionName, data) {
         var xhr = new XMLHttpRequest();
-        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 alert(xhr.responseText);
@@ -95,11 +94,13 @@ export class Bookmarks {
         };
 
         var onUrlReceived = obj => {
-            xhr.setRequestHeader('Authorization', `Bearer ${obj.api_key}`);
             xhr.open('POST', `${obj.api_url}/${interactionName}`, true);
+            xhr.setRequestHeader('Authorization', `Bearer ${obj.api_key}`);
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
             xhr.send(JSON.stringify(data));
         };
 
-        this.storage.get(['api_url', 'api_key'], onUrlReceived.bind(this));
+        this.storage.get(['api_url', 'api_key'], onUrlReceived);
     }
 }

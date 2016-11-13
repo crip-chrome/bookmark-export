@@ -42,7 +42,10 @@ export class Storage {
             if (chrome.runtime.error)
                 cb(defaultValue || '');
 
-            cb(data[key]);
+            if (Array.isArray(key))
+                cb(data);
+            else
+                cb(data[key]);
         });
     }
 }
