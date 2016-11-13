@@ -27,7 +27,7 @@
     data() {
       return {
         apiUrl: 'apiUrl',
-        apiKey: 'apiKey'
+        apiKey: 'apiKeydummy'
       }
     },
     methods: {
