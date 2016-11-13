@@ -1,38 +1,37 @@
 .form-group {
-    margin-bottom: 10px;
-    width: 100%;
-    display: table;
-    content: " ";
+  margin-bottom: 10px;
+  width: 100%;
+  display: table;
+  content: " ";
 }
 
 label {
-    display: inline-block;
-    max-width: 100%;
-    font-weight: 700;
+  display: inline-block;
+  max-width: 100%;
+  font-weight: 700;
 }
 
-    .control-label {
-        padding-top: 7px;
-        margin-bottom: 0;
-        text-align: right;
-    }
-
+.control-label {
+  padding-top: 7px;
+  margin-bottom: 0;
+  text-align: right;
+}
 
 input {
-    margin: 0;
+  margin: 0;
 }
 
-    .form-control {
-        background-color: $bg;
-        border: 2px solid rgba(238, 238, 238, 0.1);
-        border-radius: 4px;
-        color: $text-color-light;
-        height: 36px;
-        max-width: 100%;
-        display: block;
-        width: 100%;
-        padding: 6px 12px;
-        font-size: 14px;
-        line-height: 1.42857143;
-        background-image: none;
-    }
+.form-control {
+  background-color: $bg;
+  border: 2px solid rgba(238, 238, 238, 0.1);
+  border-radius: 4px;
+  color: $text-color-light;
+  height: 36px;
+  max-width: 100%;
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  background-image: none;
+}

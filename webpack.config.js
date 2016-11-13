@@ -5,7 +5,8 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var plugins = [
     new ExtractTextPlugin('../css/styles.css', {
         allChunks: true
-    })
+    }),
+    new webpack.optimize.CommonsChunkPlugin(/* chunkName= */'vendor', /* filename= */'vendor.js')
 ];
 
 if (process.argv.indexOf('--minimize') !== -1) {
@@ -17,8 +18,9 @@ var APP_DIR = path.resolve(__dirname, 'src');
 
 module.exports = {
     entry: {
-        bundle: APP_DIR + '/es6/Index.es6',
-        styles: APP_DIR + '/sass/app.scss'
+        bundle: APP_DIR + '/entry.es6',
+        styles: APP_DIR + '/sass/app.scss',
+        vendor: ['vue', 'vue-router', 'vuex', 'vuex-router-sync']
     },
     output: {
         path: BUILD_DIR + '/js',
@@ -28,12 +30,20 @@ module.exports = {
     module: {
         loaders: [
             {
+                test: /\.vue$/,
+                loader: 'vue',
+                options: {
+                    postcss: [
+                        require('autoprefixer')({
+                            browsers: ['last 3 versions']
+                        })
+                    ]
+                }
+            },
+            {
                 test: /\.es6$/,
                 exclude: /(node_modules|bower_components)/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['es2015']
-                }
+                loader: 'babel'
             },
             {
                 test: /\.scss$/,
@@ -44,10 +54,19 @@ module.exports = {
                 loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
             },
             {
-                test: /\.woff2?$|\.ttf$|\.eot$|\.svg$|\.png|\.jpe?g|\.gif$/,
-                loader: 'file-loader'
+                test: /\.(png|jpg|gif|svg)$/,
+                loader: 'url',
+                options: {
+                    limit: 10000,
+                    name: '[name].[ext]?[hash]'
+                }
             }
         ]
     },
-    plugins: plugins
+    plugins: plugins,
+    vue: {
+        loaders: {
+            js: 'babel'
+        }
+    }
 };

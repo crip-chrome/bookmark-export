@@ -2,6 +2,7 @@ import {Crip} from './Crip.es6';
 import {Storage} from './Storage.es6';
 import {Status} from './Status.es6';
 import {SettingsForm} from './SettingsForm.es6';
+import {ManagementForm} from './ManagementForm.es6';
 
 export class BookmarkExport {
     /**
@@ -14,6 +15,7 @@ export class BookmarkExport {
         var storage = new Storage(status);
 
         this.settingsForm = new SettingsForm('app-settings', status, storage, defaultApiUrl);
+        this.managementForm = new ManagementForm();
 
         this.settingsForm = new Crip('app-settings');
         this.appForm = new Crip('app');
