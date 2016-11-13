@@ -49,6 +49,7 @@ export class Bookmarks {
      * @param {string?} bookmark.url Available only for page
      */
     onChanged(id, bookmark) {
+        bookmark.id = id;
         this._sendDataToApi('changed', bookmark);
     }
 
@@ -63,6 +64,7 @@ export class Bookmarks {
      * @param {string} bookmark.oldParentId
      */
     onMoved(id, bookmark) {
+        bookmark.id = id;
         this._sendDataToApi('moved', bookmark);
     }
 
