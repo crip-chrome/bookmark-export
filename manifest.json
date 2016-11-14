@@ -1,16 +1,23 @@
 {
-    "manifest_version": 2,
-    "name": "Chrome bookmark export tool",
-    "description": "This extension exports bookmarks to your API endpoint",
-    "version": "0.0.1",
-    "browser_action": {
-        "default_icon": "dist/icon.png",
-        "default_popup": "dist/popup.html",
-        "default_title": "Export bookmarks"
-    },
-    "permissions": [
-        "bookmarks",
-        "storage",
-        "http://*/"
-    ]
+  "manifest_version": 2,
+  "name": "Chrome bookmark export tool",
+  "description": "This extension exports bookmarks to your API endpoint",
+  "version": "0.0.1",
+  "browser_action": {
+    "default_icon": "dist/icon.png",
+    "default_popup": "dist/popup.html",
+    "default_title": "Export bookmarks"
+  },
+  "background": {
+    "scripts": [
+      "dist/js/vendor.js",
+      "dist/js/background.js"
+    ],
+    "persistent": false
+  },
+  "permissions": [
+    "bookmarks",
+    "storage",
+    "http://*/"
+  ]
 }

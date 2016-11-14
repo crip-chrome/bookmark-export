@@ -17,7 +17,7 @@ export default {
         return new Promise((resolve, reject) => {
             chrome.storage.sync.set(obj, () => {
                 if (chrome.runtime.error) {
-                    reject(key);
+                    reject(chrome.runtime.error);
                     return;
                 }
 
@@ -36,7 +36,7 @@ export default {
         return new Promise((resolve, reject) => {
             chrome.storage.sync.get(key, data => {
                 if (chrome.runtime.error) {
-                    reject();
+                    reject(chrome.runtime.error);
                     return;
                 }
 

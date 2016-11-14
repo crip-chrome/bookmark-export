@@ -6,7 +6,7 @@ var plugins = [
     new ExtractTextPlugin('../css/styles.css', {
         allChunks: true
     }),
-    new webpack.optimize.CommonsChunkPlugin(/* chunkName= */'vendor', /* filename= */'vendor.js')
+    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js', Infinity)
 ];
 
 if (process.argv.indexOf('--minimize') !== -1) {
@@ -19,6 +19,7 @@ var APP_DIR = path.resolve(__dirname, 'src');
 module.exports = {
     entry: {
         bundle: APP_DIR + '/entry.es6',
+        background: APP_DIR + '/background.es6',
         styles: APP_DIR + '/sass/app.scss',
         vendor: ['vue', 'vue-router', 'vuex', 'vuex-router-sync']
     },

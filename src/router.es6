@@ -3,15 +3,15 @@ import Router from 'vue-router'
 
 Vue.use(Router);
 
-import managementView from './components/ManagementView.vue';
+import auditView from './components/AuditView.vue';
 import settingsView from './components/SettingsView.vue';
 
 export default new Router({
     mode: 'history',
     scrollBehavior: () => ({y: 0}),
     routes: [
-        {path: '/management', name: 'management', component: managementView},
+        {path: '/audit', name: 'audit', component: auditView},
         {path: '/settings', name: 'settings', component: settingsView},
-        {path: '*', redirect: '/management'}
+        {path: '*', redirect: '/audit'}
     ]
 })

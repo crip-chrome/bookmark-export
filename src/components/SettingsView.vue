@@ -76,19 +76,18 @@
   }
 </script>
 
-<style lang="sass" rel="stylesheet/sass">
-  $text-danger: #ef5350;
-  $text-success: #00b19d;
-
+<style>
   .status {
-    font-weight:bold;
+    font-weight: bold;
     padding-bottom: 10px;
-
-    &.error {
-      color: $text-danger; }
-
-    &.success {
-      color: $text-success; }
-
   }
+
+  .status.error {
+    color: #ef5350;
+  }
+
+  .status.success {
+    color: #00b19d;
+  }
+
 </style>
