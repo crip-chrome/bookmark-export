@@ -16,29 +16,79 @@
       </div>
     </div>
 
-    <div id="status">{{ status }}</div>
+    <div class="status" v-if="hasMessage" :class="{ error: !isSuccessMsg, success: isSuccessMsg }">{{ message }}</div>
 
-    <button type="submit" class="btn btn-purple" v-on:click="save">Save</button>
+    <button type="submit" class="btn btn-purple" @click="save">Save</button>
   </div>
 </template>
 
 <script>
-  module.exports = {
+  import chrome from './../store/chrome-storage.es6';
+  import * as mTypes from './../store/mutation-types.es6';
+
+  export default {
+    mounted() {
+      chrome.get(['api_key', 'api_url'])
+              .catch(() => this.showError('Settings could not be loaded. Please try later.'))
+              .then((result) => {
+                this.$store.commit(mTypes.SETTINGS_RECEIVED, result);
+                this.apiUrl = result.api_url;
+                this.apiKey = result.api_key;
+              });
+    },
+
+    computed: {
+
+      hasMessage() {
+        return this.message !== '';
+      }
+
+    },
+
     data() {
       return {
-        apiUrl: 'apiUrl',
-        apiKey: 'apiKeydummy'
+        apiUrl: '',
+        apiKey: '',
+        message: '',
+        isSuccessMsg: true//'success' // or 'error'
       }
     },
+
     methods: {
+
       save() {
-        console.log(this.apiUrl, this.apiKey);
+        var data = {api_url: this.apiUrl, api_key: this.apiKey};
+        chrome.set(data)
+                .catch(() => this.showError('Settings could not be saved. Please try later.'))
+                .then(() => {
+                  this.$store.commit(mTypes.SETTINGS_RECEIVED, data);
+                  this.message = 'Settings successfully saved.';
+                  this.isSuccessMsg = true;
+                });
+      },
+
+      showError(msg) {
+        this.message = msg;
+        this.isSuccessMsg = false;
       }
-    },
-    components: {}
+
+    }
   }
 </script>
 
-<style>
+<style lang="sass" rel="stylesheet/sass">
+  $text-danger: #ef5350;
+  $text-success: #00b19d;
 
+  .status {
+    font-weight:bold;
+    padding-bottom: 10px;
+
+    &.error {
+      color: $text-danger; }
+
+    &.success {
+      color: $text-success; }
+
+  }
 </style>
