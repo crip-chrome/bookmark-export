@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="save">
     <h5>Settings</h5>
 
     <div class="form-group">
@@ -19,7 +19,7 @@
     <div class="status" v-if="hasMessage" :class="{ error: !isSuccessMsg, success: isSuccessMsg }">{{ message }}</div>
 
     <button type="submit" class="btn btn-purple" @click="save">Save</button>
-  </div>
+  </form>
 </template>
 
 <script>
