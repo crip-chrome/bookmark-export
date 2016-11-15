@@ -1,4 +1,6 @@
 import storage from './store/chrome-storage.es6';
+import {AuditType, AuditEntry, InteractionType} from './store/audit.es6';
+import settings from './settings.es6';
 
 /**
  * Register all interested chrome bookmark events
@@ -22,28 +24,46 @@ chrome.bookmarks.onMoved.addListener(onMoved);
  *
  */
 
+window.clearAudit = () => {
+    storage.clear(settings.audit_table);
+};
+
+window.logAudit = () => {
+    storage.read(settings.audit_table)
+        .then((data) => console.log(data));
+};
+
+/**
+ *
+ * @param {string} interactionName
+ * @param {*} data
+ * @private
+ */
 function _sendDataToApi(interactionName, data) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = () => {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            console.log(xhr.responseText);
-        } else {
-            console.error('Error sending bookmark to blog. Server response is not successful', xhr);
-            // TODO: add error visible in management page
+        let entry = new AuditEntry(interactionName, data.title, data.id);
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            storage.add(settings.audit_table, entry);
+        }
+
+        if (xhr.readyState === 4 && xhr.status !== 200) {
+            entry.type = AuditType.error;
+            storage.add(settings.audit_table, entry);
         }
     };
 
-    storage.get(['api_url', 'api_key'])
+    storage.get([settings.url, settings.key])
         .then(obj => {
-            xhr.open('POST', `${obj.api_url}/${interactionName}`, true);
-            xhr.setRequestHeader('Authorization', `Bearer ${obj.api_key}`);
+            xhr.open('POST', `${obj[settings.url]}/${interactionName}`, true);
+            xhr.setRequestHeader('Authorization', `Bearer ${obj[settings.key]}`);
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
             xhr.send(JSON.stringify(data));
         })
         .catch((ex) => {
-            console.error('Error sending bookmark to blog. Could not load api settings.', ex);
-            // TODO: add error visible in management page
+            var entry = new AuditEntry(InteractionType.read_configurations, ex, data.id, AuditType.error);
+            storage.add(settings.audit_table, entry);
         });
 }
 
@@ -54,7 +74,7 @@ function _sendDataToApi(interactionName, data) {
  * @param {BookmarkTreeNode} bookmark
  */
 function onCreated(id, bookmark) {
-    _sendDataToApi('created', bookmark);
+    _sendDataToApi(InteractionType.created, bookmark);
 }
 /**
  *
@@ -67,7 +87,7 @@ function onCreated(id, bookmark) {
  * @param {BookmarkTreeNode} removeInfo.node
  */
 function onRemoved(id, removeInfo) {
-    _sendDataToApi('moved-away', removeInfo.node);
+    _sendDataToApi(InteractionType.removed, removeInfo.node);
 }
 
 /**
@@ -80,7 +100,7 @@ function onRemoved(id, removeInfo) {
  */
 function onChanged(id, changeInfo) {
     changeInfo.id = id;
-    _sendDataToApi('edited', changeInfo);
+    _sendDataToApi(InteractionType.changed, changeInfo);
 }
 
 /**
@@ -95,5 +115,5 @@ function onChanged(id, changeInfo) {
  */
 function onMoved(id, moveInfo) {
     moveInfo.id = id;
-    _sendDataToApi('changed-position', moveInfo);
+    _sendDataToApi(InteractionType.moved, moveInfo);
 }

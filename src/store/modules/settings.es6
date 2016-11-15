@@ -1,4 +1,5 @@
 import * as mTypes from '../mutation-types.es6';
+import settings from './settings.es6';
 
 const state = {
     apiKey: '',
@@ -7,8 +8,8 @@ const state = {
 
 const mutations = {
     [mTypes.SETTINGS_RECEIVED] (state, payload) {
-        state.apiKey = payload.api_key;
-        state.apiUrl = payload.api_url;
+        state.apiKey = payload[settings.key];
+        state.apiUrl = payload[settings.url];
     }
 };
 
