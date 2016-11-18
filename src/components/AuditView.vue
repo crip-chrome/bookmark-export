@@ -5,10 +5,10 @@
     <table class="table">
       <thead>
       <tr>
-        <td>#</td>
-        <td>Type</td>
-        <td>Event</td>
-        <td>Title</td>
+        <th>#</th>
+        <th>Type</th>
+        <th>Event</th>
+        <th>Title</th>
       </tr>
       </thead>
       <tbody>
@@ -48,52 +48,5 @@
 <style>
   tr.warning {
     background-color: rgba(255, 170, 0, 0.15);
-  }
-
-  table {
-    border-spacing: 0;
-    border-collapse: collapse;
-    background-color: transparent;
-  }
-
-  tbody {
-    color: rgba(255, 255, 255, 0.4);
-  }
-
-  th {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 15px;
-    font-weight: 500;
-  }
-
-  .table {
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 20px;
-  }
-
-  .table > tbody > tr > td,
-  .table > tbody > tr > th,
-  .table > tfoot > tr > td,
-  .table > tfoot > tr > th,
-  .table > thead > tr > td,
-  .table > thead > tr > th {
-    padding: 8px;
-    line-height: 1.42857143;
-    vertical-align: top;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .table > caption + thead > tr:first-child > td,
-  .table > caption + thead > tr:first-child > th,
-  .table > colgroup + thead > tr:first-child > td,
-  .table > colgroup + thead > tr:first-child > th,
-  .table > thead:first-child > tr:first-child > td,
-  .table > thead:first-child > tr:first-child > th {
-    border-top: 0;
-  }
-
-  .table > thead > tr > th {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   }
 </style>
