@@ -19,13 +19,13 @@
         <td>{{ i.interaction }}</td>
         <td>{{ i.title }}</td>
         <td>
-          <a href=# v-if="i.type == 'error' && !i.repeated" @click="repeat(i)">Repeat</a>
+          <a href=# v-if="i.type == 'error' && i.interaction != 'sync' && !i.repeated" @click="repeat(i)">Repeat</a>
         </td>
       </tr>
       </tbody>
     </table>
     <p>If extension is newly added or for some reason disabled for a while, please
-      <a href="#" id="synchronize">synchronize</a> with your blog</p>
+      <a href=# @click="sync" id="synchronize">synchronize</a> with your blog</p>
   </div>
 </template>
 
@@ -60,6 +60,10 @@
        */
       repeat(i) {
         Api.redo(i);
+      },
+
+      sync() {
+        Api.sync();
       }
     }
 

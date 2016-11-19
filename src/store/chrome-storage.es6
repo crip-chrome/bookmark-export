@@ -47,6 +47,24 @@ export default {
     },
 
     /**
+     * Retrieves the entire Bookmarks hierarchy.
+     *
+     * @returns {Promise}
+     */
+    getTree() {
+        return new Promise((resolve, reject) => {
+            chrome.bookmarks.getSubTree('1', results => {
+                if (chrome.runtime.error) {
+                    reject(chrome.runtime.error);
+                    return;
+                }
+
+                resolve(results[0]);
+            })
+        });
+    },
+
+    /**
      * Add new element to chrome storage table
      *
      * @param {string} table
@@ -140,7 +158,7 @@ export default {
         // find index of matching row
         var index = list.map((x) => x._id).indexOf(row._id);
 
-        if(!~index) throw new Error(`Could not find ${row._id} in existing data list!`);
+        if (!~index) throw new Error(`Could not find ${row._id} in existing data list!`);
         // update pointer to updated object
         list[index] = row;
 

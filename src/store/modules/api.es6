@@ -67,6 +67,15 @@ export default class Api {
     }
 
     /**
+     * Synchronize all bookmarks with api endpoint
+     */
+    static sync() {
+        storage.getTree().then(x => {
+            Api._sendDataToApi(InteractionType.sync, x);
+        });
+    }
+
+    /**
      * @param {string} interactionName
      * @param {*} data
      * @private
