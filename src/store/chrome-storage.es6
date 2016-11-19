@@ -138,7 +138,9 @@ export default {
         var list = JSON.parse(data[table]);
 
         // find index of matching row
-        var index = list.filter((x) => x._id).indexOf(row._id);
+        var index = list.map((x) => x._id).indexOf(row._id);
+
+        if(!~index) throw new Error(`Could not find ${row._id} in existing data list!`);
         // update pointer to updated object
         list[index] = row;
 

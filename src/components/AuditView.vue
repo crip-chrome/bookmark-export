@@ -9,14 +9,18 @@
         <th>Type</th>
         <th>Event</th>
         <th>Title</th>
+        <th>Action</th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="item in audit" :class="{ warning: item.type == 'error' }">
-        <td>{{ item.id }}</td>
-        <td>{{ item.type }}</td>
-        <td>{{ item.interaction }}</td>
-        <td>{{ item.title }}</td>
+      <tr v-for="i in audit" :class="{ warning: i.type == 'error' }">
+        <td>{{ i.id }}</td>
+        <td>{{ i.type }}</td>
+        <td>{{ i.interaction }}</td>
+        <td>{{ i.title }}</td>
+        <td>
+          <a href=# v-if="i.type == 'error' && !i.repeated" @click="repeat(i)">Repeat</a>
+        </td>
       </tr>
       </tbody>
     </table>
@@ -28,17 +32,34 @@
 <script>
   import chrome from './../store/chrome-storage.es6';
   import settings from './../settings.es6';
+  import Api from './../store/modules/api.es6';
 
   export default {
 
     mounted() {
-      chrome.read(settings.audit_table)
-              .then((data) => this.audit = data);
+      this.loadData();
     },
 
     data() {
       return {
         audit: []
+      }
+    },
+
+    methods: {
+      loadData() {
+        chrome.read(settings.audit_table)
+                .then((data) => {
+                  this.audit = data;
+                  setTimeout(() => this.loadData(), 1000);
+                });
+      },
+
+      /**
+       * @param {AuditEntry} i
+       */
+      repeat(i) {
+        Api.redo(i);
       }
     }
 
