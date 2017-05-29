@@ -13,7 +13,7 @@
       "dist/js/vendor.js",
       "dist/js/background.js"
     ],
-    "persistent": false
+    "persistent": true
   },
   "permissions": [
     "bookmarks",
