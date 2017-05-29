@@ -1,11 +1,10 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-import count from './modules/count.es6';
-import settings from './modules/settings.es6';
+import settings from './modules/settings'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
-    modules: {count, settings}
-});
+  modules: {settings}
+})

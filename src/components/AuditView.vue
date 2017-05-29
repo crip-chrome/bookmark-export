@@ -19,51 +19,53 @@
         <td>{{ i.interaction }}</td>
         <td>{{ i.title }}</td>
         <td>
-          <a href=# v-if="i.type == 'error' && i.interaction != 'sync' && !i.repeated" @click="repeat(i)">Repeat</a>
+          <a href="#"
+             v-if="i.type == 'error' && i.interaction != 'sync' && !i.repeated"
+             @click="repeat(i)">Repeat</a>
         </td>
       </tr>
       </tbody>
     </table>
     <p>If extension is newly added or for some reason disabled for a while, please
-      <a href=# @click="sync" id="synchronize">synchronize</a> with your blog</p>
+      <a href="#" @click="sync" id="synchronize">synchronize</a> with your blog</p>
   </div>
 </template>
 
 <script>
-  import chrome from './../store/chrome-storage.es6';
-  import settings from './../settings.es6';
-  import Api from './../store/modules/api.es6';
+  import Api from './../store/modules/api'
+  import chrome from './../store/chrome-storage'
+  import settings from './../settings'
 
   export default {
 
-    mounted() {
-      this.loadData();
+    mounted () {
+      this.loadData()
     },
 
-    data() {
+    data () {
       return {
         audit: []
       }
     },
 
     methods: {
-      loadData() {
+      loadData () {
         chrome.read(settings.audit_table)
-                .then((data) => {
-                  this.audit = data;
-                  setTimeout(() => this.loadData(), 1000);
-                });
+          .then((data) => {
+            this.audit = data
+            setTimeout(() => this.loadData(), 1000)
+          })
       },
 
       /**
        * @param {AuditEntry} i
        */
-      repeat(i) {
-        Api.redo(i);
+      repeat (i) {
+        Api.redo(i)
       },
 
-      sync() {
-        Api.sync();
+      sync () {
+        Api.sync()
       }
     }
 

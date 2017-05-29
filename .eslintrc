@@ -7,9 +7,7 @@
     "browser": true
   },
   "globals": {
-    "$": true,
-    "Laravel": true,
-    "CKEDITOR": true
+    "chrome": true
   },
   "extends": "standard",
   "rules": {

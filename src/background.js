@@ -1,14 +1,14 @@
-import storage from './store/chrome-storage.es6';
-import settings from './settings.es6';
-import Api from './store/modules/api.es6';
+import storage from './store/chrome-storage'
+import settings from './settings'
+import Api from './store/modules/api'
 
 /**
  * Register all interested chrome bookmark events
  */
-chrome.bookmarks.onCreated.addListener(Api.onCreated);
-chrome.bookmarks.onChanged.addListener(Api.onChanged);
-chrome.bookmarks.onRemoved.addListener(Api.onRemoved);
-chrome.bookmarks.onMoved.addListener(Api.onMoved);
+chrome.bookmarks.onCreated.addListener(Api.onCreated)
+chrome.bookmarks.onChanged.addListener(Api.onChanged)
+chrome.bookmarks.onRemoved.addListener(Api.onRemoved)
+chrome.bookmarks.onMoved.addListener(Api.onMoved)
 
 /**
  * @typedef {Object}   BookmarkTreeNode
@@ -24,10 +24,10 @@ chrome.bookmarks.onMoved.addListener(Api.onMoved);
  */
 
 window.clearAudit = () => {
-    storage.clear(settings.audit_table);
-};
+  storage.clear(settings.audit_table)
+}
 
 window.logAudit = () => {
-    storage.read(settings.audit_table)
-        .then((data) => console.log(data));
-};
+  storage.read(settings.audit_table)
+        .then((data) => console.log(data))
+}

@@ -23,55 +23,55 @@
 </template>
 
 <script>
-  import chrome from './../store/chrome-storage.es6';
-  import * as mTypes from './../store/mutation-types.es6';
+  import chrome from './../store/chrome-storage'
+  import * as mTypes from './../store/mutation-types'
 
   export default {
-    mounted() {
+    mounted () {
       chrome.get(['api_key', 'api_url'])
-              .catch(() => this.showError('Settings could not be loaded. Please try later.'))
-              .then((result) => {
-                this.$store.commit(mTypes.SETTINGS_RECEIVED, result);
-                this.apiUrl = result.api_url;
-                this.apiKey = result.api_key;
-              });
+        .catch(() => this.showError('Settings could not be loaded. Please try later.'))
+        .then((result) => {
+          this.$store.commit(mTypes.SETTINGS_RECEIVED, result)
+          this.apiUrl = result.api_url
+          this.apiKey = result.api_key
+        })
     },
 
     computed: {
 
-      hasMessage() {
-        return this.message !== '';
+      hasMessage () {
+        return this.message !== ''
       }
 
     },
 
-    data() {
+    data () {
       return {
         apiUrl: '',
         apiKey: '',
         message: '',
-        isSuccessMsg: true//'success' // or 'error'
+        isSuccessMsg: true
       }
     },
 
     methods: {
 
-      save() {
-        var data = {api_url: this.apiUrl, api_key: this.apiKey};
+      save () {
+        let data = { api_url: this.apiUrl, api_key: this.apiKey }
+
         chrome.set(data)
-                .catch(() => this.showError('Settings could not be saved. Please try later.'))
-                .then(() => {
-                  this.$store.commit(mTypes.SETTINGS_RECEIVED, data);
-                  this.message = 'Settings successfully saved.';
-                  this.isSuccessMsg = true;
-                });
+          .catch(() => this.showError('Settings could not be saved. Please try later.'))
+          .then(() => {
+            this.$store.commit(mTypes.SETTINGS_RECEIVED, data)
+            this.message = 'Settings successfully saved.'
+            this.isSuccessMsg = true
+          })
       },
 
-      showError(msg) {
-        this.message = msg;
-        this.isSuccessMsg = false;
+      showError (msg) {
+        this.message = msg
+        this.isSuccessMsg = false
       }
-
     }
   }
 </script>

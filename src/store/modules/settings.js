@@ -1,21 +1,21 @@
-import * as mTypes from '../mutation-types.es6';
-import settings from './settings.es6';
+import * as mTypes from '../mutation-types'
+import settings from './settings'
 
 const state = {
-    apiKey: '',
-    apiUrl: ''
-};
+  apiKey: '',
+  apiUrl: ''
+}
 
 const mutations = {
-    [mTypes.SETTINGS_RECEIVED] (state, payload) {
-        state.apiKey = payload[settings.key];
-        state.apiUrl = payload[settings.url];
-    }
-};
+  [mTypes.SETTINGS_RECEIVED] (state, payload) {
+    state.apiKey = payload[settings.key]
+    state.apiUrl = payload[settings.url]
+  }
+}
 
 // make async requests and only then call sync muttator
-const actions = {};
+const actions = {}
 
-const getters = {};
+const getters = {}
 
-export default {state, mutations, actions, getters};
+export default {state, mutations, actions, getters}

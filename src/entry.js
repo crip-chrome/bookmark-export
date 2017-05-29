@@ -1,4 +1,4 @@
-import { app } from './app.es6'
+import { app } from './app'
 
 // actually mount to DOM
-app.$mount('#app');
+app.$mount('#app')

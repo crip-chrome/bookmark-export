@@ -7,28 +7,25 @@
     </nav>
 
     <div class="clearfix">
-      <!--<example></example>-->
       <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-  //import Example from './Example.vue';
   export default {
-    mounted() {
+    mounted () {
       console.log('Component ready.')
     },
+
     computed: {
-      auditView() {
-        return this.$route.name == 'audit';
+      auditView () {
+        return this.$route.name === 'audit'
       },
-      settingsView() {
-        return this.$route.name == 'settings';
+
+      settingsView () {
+        return this.$route.name === 'settings'
       }
-    },
-    components: {
-      // Example
     }
   }
 </script>
