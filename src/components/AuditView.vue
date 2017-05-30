@@ -9,7 +9,6 @@
         <th>Type</th>
         <th>Event</th>
         <th>Title</th>
-        <th>Action</th>
       </tr>
       </thead>
       <tbody>
@@ -18,11 +17,6 @@
         <td>{{ i.type }}</td>
         <td>{{ i.interaction }}</td>
         <td>{{ i.title }}</td>
-        <td>
-          <a href="#"
-             v-if="i.type == 'error' && i.interaction != 'sync' && !i.repeated"
-             @click="repeat(i)">Repeat</a>
-        </td>
       </tr>
       </tbody>
     </table>
@@ -32,9 +26,8 @@
 </template>
 
 <script>
-  import Api from './../store/modules/api'
-  import chrome from './../store/chrome-storage'
-  import settings from './../settings'
+  import {sync} from '../api/blog'
+  import {getLogs} from '../api/db'
 
   export default {
 
@@ -49,26 +42,23 @@
     },
 
     methods: {
+      /**
+       * Load audit data from storage.
+       */
       loadData () {
-        chrome.read(settings.audit_table)
-          .then((data) => {
-            this.audit = data
-            setTimeout(() => this.loadData(), 1000)
-          })
+        getLogs(10).then(logs => {
+          this.audit = logs
+          setTimeout(() => this.loadData(), 1000)
+        })
       },
 
       /**
-       * @param {AuditEntry} i
+       * Full sync with blog.
        */
-      repeat (i) {
-        Api.redo(i)
-      },
-
       sync () {
-        Api.sync()
+        sync()
       }
     }
-
   }
 </script>
 

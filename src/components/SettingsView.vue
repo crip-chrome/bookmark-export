@@ -23,26 +23,24 @@
 </template>
 
 <script>
-  import chrome from './../store/chrome-storage'
-  import * as mTypes from './../store/mutation-types'
+  import {getSettings, saveSettings} from '../api/db'
 
   export default {
     mounted () {
-      chrome.get(['api_key', 'api_url'])
-        .catch(() => this.showError('Settings could not be loaded. Please try later.'))
-        .then((result) => {
-          this.$store.commit(mTypes.SETTINGS_RECEIVED, result)
-          this.apiUrl = result.api_url
-          this.apiKey = result.api_key
-        })
+      getSettings({'api_key': '', 'api_url': ''}).then((settings) => {
+        this.apiUrl = settings.api_url
+        this.apiKey = settings.api_key
+      })
     },
 
     computed: {
-
+      /**
+       * Determines is there an message presented.
+       * @return {boolean}
+       */
       hasMessage () {
         return this.message !== ''
       }
-
     },
 
     data () {
@@ -56,18 +54,23 @@
 
     methods: {
 
+      /**
+       * Save settings to local database.
+       */
       save () {
-        let data = { api_url: this.apiUrl, api_key: this.apiKey }
-
-        chrome.set(data)
-          .catch(() => this.showError('Settings could not be saved. Please try later.'))
-          .then(() => {
-            this.$store.commit(mTypes.SETTINGS_RECEIVED, data)
-            this.message = 'Settings successfully saved.'
-            this.isSuccessMsg = true
-          })
+        Promise.all([
+          saveSettings('api_url', this.apiUrl),
+          saveSettings('api_key', this.apiKey)
+        ]).then(() => {
+          this.message = 'Settings successfully saved.'
+          this.isSuccessMsg = true
+        }).catch(() => this.showError('Settings could not be saved. Please try later.'))
       },
 
+      /**
+       * Show error message.
+       * @param msg
+       */
       showError (msg) {
         this.message = msg
         this.isSuccessMsg = false

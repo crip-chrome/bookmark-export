@@ -1,14 +1,12 @@
-import storage from './store/chrome-storage'
-import settings from './settings'
-import Api from './store/modules/api'
+import * as blog from './api/blog'
 
 /**
  * Register all interested chrome bookmark events
  */
-chrome.bookmarks.onCreated.addListener(Api.onCreated)
-chrome.bookmarks.onChanged.addListener(Api.onChanged)
-chrome.bookmarks.onRemoved.addListener(Api.onRemoved)
-chrome.bookmarks.onMoved.addListener(Api.onMoved)
+chrome.bookmarks.onCreated.addListener((id, bookmark) => blog.create(bookmark))
+chrome.bookmarks.onChanged.addListener((id, bookmark) => blog.change(bookmark))
+chrome.bookmarks.onRemoved.addListener((id, bookmark) => blog.remove(bookmark))
+chrome.bookmarks.onMoved.addListener((id, bookmark) => blog.move(id, bookmark))
 
 /**
  * @typedef {Object}   BookmarkTreeNode
@@ -22,12 +20,3 @@ chrome.bookmarks.onMoved.addListener(Api.onMoved)
  *
  * @property {?BookmarkTreeNode[]} children  An ordered list of children of this node.
  */
-
-window.clearAudit = () => {
-  storage.clear(settings.audit_table)
-}
-
-window.logAudit = () => {
-  storage.read(settings.audit_table)
-        .then((data) => console.log(data))
-}

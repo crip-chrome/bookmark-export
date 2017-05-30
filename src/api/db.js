@@ -1,19 +1,22 @@
+import AuditEntry from './../models/AuditEntry'
+
 let db = openDatabase('crip-bookmark-export', '1.0', 'Bookmark DB', 2 * 1024 * 1024)
 
 db.transaction((tx) => {
-  tx.executeSql('CREATE TABLE IF NOT EXISTS LOGS (id INTEGER PRIMARY KEY AUTOINCREMENT, log)')
+  tx.executeSql('CREATE TABLE IF NOT EXISTS LOGS (id INTEGER PRIMARY KEY AUTOINCREMENT, type, interaction, title)')
   tx.executeSql('CREATE TABLE IF NOT EXISTS SETTINGS (key UNIQUE, val)')
 })
 
 /**
- * Insert log record to database.
- * @param {string} log
+ * Insert audit record to database.
+ * @param {AuditEntry} log
  * @return {Promise.<string>}
  */
 export function insertLog (log) {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      doQuery(tx, 'INSERT INTO LOGS (log) VALUES (?)', [log], () => {
+      const query = 'INSERT INTO LOGS (type, interaction, title) VALUES (?, ?, ?)'
+      doQuery(tx, query, [log.type, log.interaction, log.title], () => {
         resolve('Log inserted')
       })
     })
@@ -21,17 +24,17 @@ export function insertLog (log) {
 }
 
 /**
- * Get logs records from database.
+ * Get audit records from database.
  * @param {number} count
- * @return {Promise.<{id:string,log:string}>}
+ * @return {Promise.<Array.<AuditEntry>>}
  */
-export function getLogs (count = 2) {
+export function getLogs (count = 50) {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      doQuery(tx, 'SELECT id, log FROM LOGS ORDER BY id DESC LIMIT 0,?', [count], (tx, results) => {
+      doQuery(tx, 'SELECT id, type, interaction, title FROM LOGS ORDER BY id DESC LIMIT 0,?', [count], (tx, results) => {
         let ret = []
         for (let i = 0; i < results.rows.length; i++) {
-          ret.push(results.rows.item(i))
+          ret.push(new AuditEntry(results.rows.item(i)))
         }
         resolve(ret)
       }, null)
@@ -51,7 +54,7 @@ export function saveSettings (key, value) {
       doQuery(tx, 'SELECT count(*) totalCount FROM SETTINGS WHERE key = ?', [key], (tx, results) => {
         const exists = results.rows.item(0).totalCount
         if (exists) {
-          tx.executeSql('UPDATE SETTINGS SET val = ? WHERE key = ?', [value, key], () => {
+          doQuery(tx, 'UPDATE SETTINGS SET val = ? WHERE key = ?', [value, key], () => {
             resolve('Record updated')
           })
         } else {
@@ -65,17 +68,20 @@ export function saveSettings (key, value) {
 }
 
 /**
- * Get settings value from database.
- * @param {string} key
- * @param {string} defaultValue
- * @return {Promise.<string>}
+ * Get settings from database.
+ * @param {object} defaultValue
+ * @return {Promise}
  */
-export function getSettings (key, defaultValue = '') {
+export function getSettings (defaultValue = {}) {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      doQuery(tx, 'SELECT val FROM SETTINGS WHERE key = ?', [key], (tx, results) => {
+      doQuery(tx, 'SELECT key, val FROM SETTINGS', [], (tx, results) => {
         if (results.rows.length > 0) {
-          resolve(results.rows.item(0).val)
+          let ret = {}
+          for (let i = 0; i < results.rows.length; i++) {
+            ret[results.rows.item(i).key] = results.rows.item(i).val
+          }
+          resolve(ret)
         } else {
           resolve(defaultValue)
         }
@@ -83,8 +89,9 @@ export function getSettings (key, defaultValue = '') {
     })
   })
 }
+
 /**
- *
+ * Execute and log query if error occurred.
  * @param tx
  * @param {string} sqlStatement
  * @param values
