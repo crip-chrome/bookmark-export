@@ -6,18 +6,34 @@
 </template>
 
 <script lang="ts">
-  export default {
-    name: 'app'
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+
+  @Component({name: 'app-custom-name'})
+  export default class App extends Vue {
+
+    /**
+     * Call greeter when component instance is created.
+     * @return {void}
+     */
+    created() {
+      this.greet()
+    }
+
+    /**
+     * Computes component message body.
+     * @return {string}
+     */
+    get message() {
+      return `Welcome to CRIP bookmarks export application.`
+    }
+
+    /**
+     * Greets user in a console.
+     * @return {void}
+     */
+    greet() {
+      console.log(this.message)
+    }
   }
 </script>
-
-<style>
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
-</style>
