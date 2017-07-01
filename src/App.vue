@@ -7,10 +7,12 @@
 
 <script lang="ts">
   import Vue from 'vue'
+  import {IApi} from './api'
   import Component from 'vue-class-component'
 
   @Component({name: 'app-custom-name'})
   export default class App extends Vue {
+    $api: IApi
 
     /**
      * Call greeter when component instance is created.
@@ -18,6 +20,7 @@
      */
     created() {
       this.greet()
+      this.$api.auth.isValidToken('token')
     }
 
     /**

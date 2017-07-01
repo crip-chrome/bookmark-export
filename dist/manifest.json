@@ -4,16 +4,9 @@
   "description": "This extension exports bookmarks to your API endpoint",
   "version": "0.1.0",
   "browser_action": {
-    "default_icon": "dist/icon.png",
-    "default_popup": "dist/popup.html",
+    "default_icon": "logo.png",
+    "default_popup": "index.html",
     "default_title": "Export bookmarks"
-  },
-  "background": {
-    "scripts": [
-      "dist/js/vendor.js",
-      "dist/js/background.js"
-    ],
-    "persistent": true
   },
   "permissions": [
     "bookmarks",

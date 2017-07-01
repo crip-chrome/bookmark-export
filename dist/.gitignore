@@ -1,3 +1,5 @@
 *
 !.gitignore
 !popup.html
+!logo.png
+!manifest.json
