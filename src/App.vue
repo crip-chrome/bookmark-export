@@ -1,16 +1,18 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view></router-view>
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue'
-  import {IApi} from './api'
   import Component from 'vue-class-component'
 
-  @Component({name: 'app-custom-name'})
+  import {IApi} from './api'
+  import router from './router'
+  import * as routes from './router/routes'
+
+  @Component({name: 'app'})
   export default class App extends Vue {
     $api: IApi
 
@@ -18,25 +20,14 @@
      * Call greeter when component instance is created.
      * @return {void}
      */
-    created() {
-      this.greet()
-      this.$api.auth.isValidToken('token')
-    }
+    async created() {
+      let isValidToken = await this.$api.auth.isValidToken('token')
+      if (isValidToken) {
+        router.push(routes.bookmarks('1'))
+        return
+      }
 
-    /**
-     * Computes component message body.
-     * @return {string}
-     */
-    get message() {
-      return `Welcome to CRIP bookmarks export application.`
-    }
-
-    /**
-     * Greets user in a console.
-     * @return {void}
-     */
-    greet() {
-      console.log(this.message)
+      router.push(routes.login())
     }
   }
 </script>
