@@ -8,26 +8,18 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
 
-  import {IApi} from './api'
-  import router from './router'
-  import * as routes from './router/routes'
+  import {auth} from './services'
 
   @Component({name: 'app'})
   export default class App extends Vue {
-    $api: IApi
 
     /**
-     * Call greeter when component instance is created.
+     * Check user authorization when component instance is created and redirect
+     * to correct page.
      * @return {void}
      */
     async created() {
-      let isValidToken = await this.$api.auth.isValidToken('token')
-      if (isValidToken) {
-        router.push(routes.bookmarks('1'))
-        return
-      }
-
-      router.push(routes.login())
+      await auth.check()
     }
   }
 </script>

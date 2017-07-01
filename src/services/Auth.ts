@@ -1,31 +1,43 @@
-import Vue from 'vue'
-import {IStorage} from './Storage'
+import * as routes from '../router/routes'
+import router from '../router'
+import {auth} from '../api'
+import {IStorageService} from './Storage'
 
-export interface ISession {
+export interface IAuthService {
   check(): Promise<boolean>
 }
 
-export module Crip.Auth {
+export class Auth implements IAuthService {
+  storage: IStorageService
 
-  export class Session implements ISession {
-    storage: IStorage
+  constructor(storage: IStorageService) {
+    this.storage = storage
+  }
 
-    constructor(storage: IStorage) {
-      this.storage = storage
+  async check(): Promise<boolean> {
+    const isAuthorized = await this.isAuthorized()
+    if (isAuthorized) {
+      router.push(routes.bookmarks('1'))
     }
 
-    async check(): Promise<boolean> {
-      try {
-        const token = this.storage.getToken()
-        return true
-      } catch (error) {
-        return false
-      }
-    }
+    router.push(routes.login())
+    return isAuthorized
+  }
 
-    private async validateToken(token: string): Promise<boolean> {
-      return undefined
+  private async isAuthorized(): Promise<boolean> {
+    try {
+      const token = this.storage.getToken()
+      return this.validateToken(token)
+    } catch (error) {
+      return false
     }
   }
 
+  private async validateToken(token: string): Promise<boolean> {
+    if (!token || token === '') {
+      return false
+    }
+
+    return await auth.isValidToken(token)
+  }
 }
