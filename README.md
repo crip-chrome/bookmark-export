@@ -1,5 +1,21 @@
 # bookmark-export
 
-This chrome extension exports Chrome bookmarks to your API endpoint
+> A Vue.js project
 
-Best solution to post your bookmarks is [Crip Bookmark Blog](https://github.com/crip-chrome/bookmark-blog)
+## Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
+```
+
+For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
