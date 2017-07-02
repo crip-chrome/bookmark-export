@@ -5,16 +5,14 @@
         <div class="panel panel-primary">
           <div class="panel-heading">Login</div>
           <form class="panel-body form-horizontal" @submit.prevent="login">
-            <form-group :errors="errors.email" label="Email" target="email">
+            <form-group :errors="errors" label="Email" target="email">
               <input
                   type="email" name="email" id="email" class="form-control"
                   v-model="form.email" placeholder="Email address" required
               />
             </form-group>
 
-            <form-group
-                :errors="errors.password" label="Password" target="password"
-            >
+            <form-group label="Password" target="password" >
               <input
                   type="password" name="password" id="password"
                   class="form-control" v-model="form.password"
@@ -55,16 +53,13 @@
       password: '',
     }
 
-    errors = {
-      email: [],
-      password: []
-    }
+    errors = []
 
     async login() {
       try {
         await auth.authorize(this.form)
       } catch (errors) {
-        this.errors = errors
+        this.errors = ['These credentials do not match our records.']
       }
     }
   }

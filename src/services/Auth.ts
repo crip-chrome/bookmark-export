@@ -32,7 +32,7 @@ export class Auth implements IAuthService {
 
   async authorize(credentials: ICredentials): Promise<boolean> {
     let response = await auth.authenticate(credentials)
-    console.log({response, type: typeof response})
+
     if (typeof response === 'string') {
       this.storage.saveToken(response)
       router.push(routes.bookmarks('1'))

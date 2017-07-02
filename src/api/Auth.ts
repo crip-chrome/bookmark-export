@@ -5,14 +5,13 @@ export interface ICredentials {
   password: string
 }
 
-export interface IAuthErrors {
-  email?: Array<string>
-  password?: Array<string>
+export interface IAuthError {
+  error: string
 }
 
 export interface IAuth {
   isValidToken(token: string): Promise<boolean>
-  authenticate(credentials: ICredentials): Promise<string | IAuthErrors>
+  authenticate(credentials: ICredentials): Promise<string | IAuthError>
 }
 
 export class Auth implements IAuth {
@@ -40,13 +39,13 @@ export class Auth implements IAuth {
     }
   }
 
-  async authenticate(credentials: ICredentials): Promise<string | IAuthErrors> {
+  async authenticate(credentials: ICredentials): Promise<string | IAuthError> {
     try {
       let response = await axios.post(`${this.url}/login`, credentials)
       return (<AxiosResponse>response).data.token
     } catch (error) {
       if (error.response.status === 422) {
-        return error.response.data as IAuthErrors
+        return error.response.data as IAuthError
       }
       // this is not validation error, so we re-throw it
       throw error
