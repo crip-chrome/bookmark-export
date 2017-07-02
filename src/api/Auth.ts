@@ -3,28 +3,60 @@ import axios, {AxiosResponse} from 'axios'
 import Service from '../services/Service'
 
 export interface ICredentials {
+  /**
+   * User email address.
+   */
   email: string
+
+  /**
+   * User password.
+   */
   password: string
 }
 
 export interface IAuthError {
+  /**
+   * Authentication error code.
+   */
   error: string
 }
 
 export interface IAuth {
+  /**
+   * Validate token in server API.
+   * @param  {string} token
+   * @return {Promise<boolean>}
+   */
   isValidToken(token: string): Promise<boolean>
+
+  /**
+   * Authenticate user in server API.
+   * @param  {ICredentials} credentials
+   * @return {Promise<string | IAuthError>}
+   */
   authenticate(credentials: ICredentials): Promise<string | IAuthError>
 }
 
 export class Auth extends Service implements IAuth {
+  /**
+   * Base URL of auth API.
+   */
   private url: string
 
+  /**
+   * Construct Auth api service instance.
+   */
   constructor() {
     super('Api.Auth')
     // TODO: get URL value from configuration as it may change in any moment
     this.url = 'http://href.dev/api'
   }
 
+  /**
+   * Validate token in server API.
+   * @param  {string} token
+   * @return {Promise<boolean>}
+   */
   async isValidToken(token: string): Promise<boolean> {
     try {
       let response = await axios.get(`${this.url}/href`, {
@@ -44,6 +76,11 @@ export class Auth extends Service implements IAuth {
     }
   }
 
+  /**
+   * Authenticate user in server API.
+   * @param  {ICredentials} credentials
+   * @return {Promise<string | IAuthError>}
+   */
   async authenticate(credentials: ICredentials): Promise<string | IAuthError> {
     try {
       let response = await axios.post(`${this.url}/login`, credentials)

@@ -5,26 +5,51 @@ import {auth} from '../api'
 import {IStorageService} from './Storage'
 
 export interface ICredentials {
+  /**
+   * User email.
+   */
   email: string
+
+  /**
+   * User password.
+   */
   password: string
 }
 
 export interface IAuthService {
+  /**
+   * Check user authorization state and redirect to correct route.
+   * @return {Promise<boolean>}
+   */
   check(): Promise<boolean>
+
+  /**
+   * Authorize user and redirect to bookmarks in case of success.
+   * @param  {ICredentials} credentials
+   * @return {Promise<boolean>}
+   */
   authorize(credentials: ICredentials): Promise<boolean>
 }
 
 export class Auth extends Service implements IAuthService {
   storage: IStorageService
 
+  /**
+   * Construct Auth service instance.
+   * @param {IStorageService} storage
+   */
   constructor(storage: IStorageService) {
     super('Services.Auth')
     this.storage = storage
   }
 
+  /**
+   * Check user authorization state and redirect to correct route.
+   * @return {Promise<boolean>}
+   */
   async check(): Promise<boolean> {
     const isAuthorized = await this.isAuthorized()
-    
+
     if (isAuthorized) {
       router.push(routes.bookmarks('1'))
       return true
@@ -34,6 +59,11 @@ export class Auth extends Service implements IAuthService {
     return false
   }
 
+  /**
+   * Authorize user and redirect to bookmarks in case of success.
+   * @param  {ICredentials} credentials
+   * @return {Promise<boolean>}
+   */
   async authorize(credentials: ICredentials): Promise<boolean> {
     let response = await auth.authenticate(credentials)
     let isToken = typeof response === 'string'
@@ -49,6 +79,10 @@ export class Auth extends Service implements IAuthService {
     throw response
   }
 
+  /**
+   * Check user authorization status.
+   * @return {Promise<boolean>}
+   */
   private async isAuthorized(): Promise<boolean> {
     try {
       const token = this.storage.getToken()
@@ -61,6 +95,11 @@ export class Auth extends Service implements IAuthService {
     }
   }
 
+  /**
+   * Check token status.
+   * @param  {string} token
+   * @return {Promise<boolean>}
+   */
   private async validateToken(token: string): Promise<boolean> {
     if (!token || token === '') {
       return false
