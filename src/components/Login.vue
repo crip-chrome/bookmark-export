@@ -8,7 +8,7 @@
             <form-group :errors="errors.email" label="Email" target="email">
               <input
                   type="email" name="email" id="email" class="form-control"
-                  v-model="form.email" placeholder="Email address"
+                  v-model="form.email" placeholder="Email address" required
               />
             </form-group>
 
@@ -18,7 +18,7 @@
               <input
                   type="password" name="password" id="password"
                   class="form-control" v-model="form.password"
-                  placeholder="Password"
+                  placeholder="Password" required
               />
             </form-group>
 

@@ -1,7 +1,5 @@
 import axios, {AxiosResponse} from 'axios'
 
-import User from '../models/User'
-
 export interface ICredentials {
   email: string
   password: string
@@ -14,7 +12,7 @@ export interface IAuthErrors {
 
 export interface IAuth {
   isValidToken(token: string): Promise<boolean>
-  authenticate(credentials: ICredentials): Promise<User | IAuthErrors>
+  authenticate(credentials: ICredentials): Promise<string | IAuthErrors>
 }
 
 export class Auth implements IAuth {
@@ -22,12 +20,12 @@ export class Auth implements IAuth {
 
   constructor() {
     // TODO: get URL value from configuration as it may change in any moment
-    this.url = 'http://href.dev/api/chrome'
+    this.url = 'http://href.dev/api'
   }
 
   async isValidToken(token: string): Promise<boolean> {
     try {
-      await axios.get(`${this.url}/validate`, {
+      await axios.get(`${this.url}/href`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -42,10 +40,10 @@ export class Auth implements IAuth {
     }
   }
 
-  async authenticate(credentials: ICredentials): Promise<User | IAuthErrors> {
+  async authenticate(credentials: ICredentials): Promise<string | IAuthErrors> {
     try {
-      let response = await axios.post(`${this.url}/authenticate`, credentials)
-      return new User((<AxiosResponse>response).data)
+      let response = await axios.post(`${this.url}/login`, credentials)
+      return (<AxiosResponse>response).data.token
     } catch (error) {
       if (error.response.status === 422) {
         return error.response.data as IAuthErrors

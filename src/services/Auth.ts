@@ -1,6 +1,5 @@
 import * as routes from '../router/routes'
 import router from '../router'
-import User from '../models/User'
 import {auth} from '../api'
 import {IStorageService} from './Storage'
 
@@ -33,12 +32,14 @@ export class Auth implements IAuthService {
 
   async authorize(credentials: ICredentials): Promise<boolean> {
     let response = await auth.authenticate(credentials)
-    if (typeof response === typeof User) {
-      // TODO: store user somewhere
+    console.log({response, type: typeof response})
+    if (typeof response === 'string') {
+      this.storage.saveToken(response)
+      router.push(routes.bookmarks('1'))
       return true
     }
 
-    return false
+    throw response
   }
 
   private async isAuthorized(): Promise<boolean> {
