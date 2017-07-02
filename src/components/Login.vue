@@ -12,7 +12,7 @@
               />
             </form-group>
 
-            <form-group label="Password" target="password" >
+            <form-group label="Password" target="password">
               <input
                   type="password" name="password" id="password"
                   class="form-control" v-model="form.password"

@@ -1,5 +1,7 @@
 import axios, {AxiosResponse} from 'axios'
 
+import Service from '../services/Service'
+
 export interface ICredentials {
   email: string
   password: string
@@ -14,21 +16,24 @@ export interface IAuth {
   authenticate(credentials: ICredentials): Promise<string | IAuthError>
 }
 
-export class Auth implements IAuth {
+export class Auth extends Service implements IAuth {
   private url: string
 
   constructor() {
+    super('Api.Auth')
     // TODO: get URL value from configuration as it may change in any moment
     this.url = 'http://href.dev/api'
   }
 
   async isValidToken(token: string): Promise<boolean> {
     try {
-      await axios.get(`${this.url}/href`, {
+      let response = await axios.get(`${this.url}/href`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
+
+      this.log.log('isValidToken', {response})
 
       // success to request server with auth token header
       return true
