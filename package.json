@@ -1,12 +1,12 @@
 {
   "name": "bookmark-export",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "Bookmark export to CRIP hrefs blog.",
   "author": "Igors Krasjukovs <tahq69@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
-    "start": "node build/dev-server.js",
+    "start": "node build/build-and-watch.js",
     "build": "node build/build.js"
   },
   "dependencies": {
@@ -18,6 +18,7 @@
     "vue-spinner": "^1.0.2"
   },
   "devDependencies": {
+    "@types/chrome": "0.0.47",
     "autoprefixer": "^6.7.2",
     "chalk": "^1.1.3",
     "connect-history-api-fallback": "^1.3.0",
