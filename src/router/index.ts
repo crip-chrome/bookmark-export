@@ -18,7 +18,7 @@ export default new Router({
       name: 'login',
       component: Login
     }, {
-      path: '/bookmarks',
+      path: '/bookmarks/:page',
       name: 'bookmarks',
       component: Bookmarks
     },

@@ -2,16 +2,16 @@
   <div class="panel bookmarks panel-primary">
     <div class="panel-heading">
       <span>Bookmarks</span>
-      <span v-for="parent in parents">
-        <a @click.prevent="open(parent)">{{ parent.title }}</a>
-      </span>
+    </div>
+    <div class="panel-body">
+      <breadcrumb></breadcrumb>
     </div>
     <div class="table-responsive">
       <table class="table table-hover">
         <thead>
         <tr>
           <th>#</th>
-          <th>Date added</th>
+          <th>Date created</th>
           <th>Title</th>
           <th>Url</th>
         </tr>
@@ -37,16 +37,22 @@
   import Component from 'vue-class-component'
 
   import {bookmarks} from '../api'
+  import Breadcrumb from './Breadcrumb.vue'
 
-  import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
+  import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode
 
-  @Component({name: 'bookmarks'})
+  @Component({
+    name: 'bookmarks',
+    components: {Breadcrumb}
+  })
   export default class Bookmarks extends Vue {
+
     bookmarks: Array<BookmarkTreeNode> = []
+
     parents: Array<BookmarkTreeNode> = [{title: 'Root', id: '1'}]
 
     async created() {
-      this.getBookmarks(1)
+      this.getBookmarks()
     }
 
     mounted() {
@@ -58,14 +64,12 @@
     }
 
     open(bookmark: BookmarkTreeNode) {
-      console.log({bookmark})
       if (bookmark.url) return
-
       this.parents.push(bookmark)
     }
 
-    async getBookmarks(parentId = 1) {
-      this.bookmarks = await bookmarks.getChild(parentId)
+    async getBookmarks(parentId = '1') {
+      this.bookmarks = await bookmarks.getChildren(parentId)
     }
   }
 </script>
@@ -80,5 +84,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .breadcrumb-item {
+    color: white;
   }
 </style>

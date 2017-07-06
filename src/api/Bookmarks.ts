@@ -3,7 +3,19 @@ import Service from '../services/Service'
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 
 export interface IBookmarks {
-  getChild(id?: number): Promise<Array<BookmarkTreeNode>>
+  /**
+   * Get bookmark child nodes by id.
+   * @param id
+   * @return {Promise<BookmarkTreeNode[]>}
+   */
+  getChildren(id?: string): Promise<BookmarkTreeNode[]>
+
+  /**
+   * Get bookmark node by identifier.
+   * @param  {String} id
+   * @return {Promise<BookmarkTreeNode>}
+   */
+  get(id?: string): Promise<BookmarkTreeNode>
 }
 
 export class Bookmarks extends Service implements IBookmarks {
@@ -13,15 +25,40 @@ export class Bookmarks extends Service implements IBookmarks {
 
   /**
    * Get bookmark child nodes by id.
-   * @param  {Number} id
-   * @return {Promise<Array<BookmarkTreeNode>>}
+   * @param id
+   * @return {Promise<BookmarkTreeNode[]>}
    */
-  getChild(id: number = 1): Promise<Array<BookmarkTreeNode>> {
+  getChildren(id: string = '1'): Promise<BookmarkTreeNode[]> {
     return new Promise((resolve, reject) => {
-      chrome.bookmarks.getChildren(id.toString(), (results) => {
-        if (!results) reject('No data')
+      chrome.bookmarks.getChildren(id, (results) => {
+        this.log.log('getChildren', {results})
+
+        if (!results) {
+          reject('No data')
+          return
+        }
 
         resolve(results)
+      })
+    })
+  }
+
+  /**
+   * Get bookmark node by identifier.
+   * @param  {String} id
+   * @return {Promise<BookmarkTreeNode>}
+   */
+  get(id: string): Promise<BookmarkTreeNode> {
+    return new Promise((resolve, reject) => {
+      chrome.bookmarks.get(id, (results) => {
+        this.log.log('get', {result: results[0]})
+
+        if (!results[0]) {
+          reject('No data')
+          return
+        }
+
+        resolve(results[0])
       })
     })
   }
