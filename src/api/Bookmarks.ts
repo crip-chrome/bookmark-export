@@ -16,6 +16,13 @@ export interface IBookmarks {
    * @return {Promise<BookmarkTreeNode>}
    */
   get(id?: string): Promise<BookmarkTreeNode>
+
+  /**
+   * Determines is the bookmark registered in CRIP system.
+   * @param  {String} url
+   * @return {Promise<boolean>}
+   */
+  isRegistered(url: string): Promise<boolean>
 }
 
 export class Bookmarks extends Service implements IBookmarks {
@@ -61,5 +68,14 @@ export class Bookmarks extends Service implements IBookmarks {
         resolve(results[0])
       })
     })
+  }
+
+  /**
+   * Determines is the bookmark registered in CRIP system.
+   * @param  {String} url
+   * @return {Promise<boolean>}
+   */
+  isRegistered(url: string): Promise<boolean> {
+    return undefined
   }
 }

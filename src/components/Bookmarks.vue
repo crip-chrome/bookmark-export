@@ -3,9 +3,11 @@
     <div class="panel-heading">
       <span>Bookmarks</span>
     </div>
+
     <div class="panel-body">
       <breadcrumb></breadcrumb>
     </div>
+
     <div class="table-responsive">
       <table class="table table-hover">
         <thead>
@@ -34,10 +36,12 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import Component from 'vue-class-component'
+  import {Component, Watch} from 'vue-property-decorator'
 
-  import {bookmarks} from '../api'
+  import * as routes from '../router/routes'
   import Breadcrumb from './Breadcrumb.vue'
+  import router from '../router'
+  import {bookmarks} from '../services'
 
   import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode
 
@@ -47,29 +51,62 @@
   })
   export default class Bookmarks extends Vue {
 
+    /**
+     * Collection of bookmark nodes in current page.
+     */
     bookmarks: Array<BookmarkTreeNode> = []
 
-    parents: Array<BookmarkTreeNode> = [{title: 'Root', id: '1'}]
-
-    async created() {
-      this.getBookmarks()
+    /**
+     * Hook in to vue lifecycle and start load bookmarks while component is
+     * mounting.
+     * @return {Promise<void>}
+     */
+    async created(): Promise<void> {
+      return await this.getBookmarks()
     }
 
+    /**
+     * Hook in to vue lifecycle and log initialization completed state.
+     */
     mounted() {
       console.log('Bookmarks component mounted.')
     }
 
+    /**
+     * Convert timestamp to readable date string.
+     * @param  {Number} timestamp
+     * @return {String}
+     */
     date(timestamp: number) {
       return new Date(timestamp).toISOString().slice(0, 10)
     }
 
+    /**
+     * Open bookmark.
+     * @param {BookmarkTreeNode} bookmark
+     */
     open(bookmark: BookmarkTreeNode) {
       if (bookmark.url) return
-      this.parents.push(bookmark)
+      router.push(routes.bookmarks(bookmark.id))
     }
 
-    async getBookmarks(parentId = '1') {
+    /**
+     * Fetch bookmarks from browser storage.
+     * @param  {String} parentId
+     * @return {Promise<void>}
+     */
+    async getBookmarks(parentId = '1'): Promise<void> {
       this.bookmarks = await bookmarks.getChildren(parentId)
+    }
+
+    /**
+     * Watch route page change and mutate data.
+     * @param  {String} page
+     * @return {Promise<void>}
+     */
+    @Watch('$route.params.page')
+    async onPageChange(page: string): Promise<void> {
+      await this.getBookmarks(page)
     }
   }
 </script>

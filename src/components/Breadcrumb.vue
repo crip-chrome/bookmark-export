@@ -16,8 +16,9 @@
   import Vue from 'vue'
   import { Component, Watch } from 'vue-property-decorator'
 
-  import router from '../router'
   import * as routes from '../router/routes'
+  import router from '../router'
+  import {bookmarks} from '../services'
 
   import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode
 
@@ -33,21 +34,9 @@
       return routes.bookmarks(id)
     }
 
-    async getPages (page: string): Promise<BookmarkTreeNode[]> {
-      let pages = []
-      console.log({page})
-      while (parseInt(page) > 1) {
-        /* let curr = await this.$api.hrefs.find(page)
-        page = curr.parent_id
-        result.unshift(curr) */
-      }
-
-      return pages
-    }
-
     @Watch('$route.params.page')
     async onPageChange(page: string): Promise<void> {
-      this.pages = await this.getPages(page)
+      this.pages = await bookmarks.getTree(page)
     }
   }
 </script>
