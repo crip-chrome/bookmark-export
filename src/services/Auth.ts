@@ -18,6 +18,12 @@ export interface ICredentials {
 
 export interface IAuthService {
   /**
+   * Authorised user token.
+   * @return {String}
+   */
+  token: string
+
+  /**
    * Check user authorization state and redirect to correct route.
    * @return {Promise<boolean>}
    */
@@ -41,6 +47,14 @@ export class Auth extends Service implements IAuthService {
   constructor(storage: IStorageService) {
     super('Services.Auth')
     this.storage = storage
+  }
+
+  /**
+   * Authorised user token.
+   * @return {String}
+   */
+  get token() {
+    return this.storage.getToken()
   }
 
   /**

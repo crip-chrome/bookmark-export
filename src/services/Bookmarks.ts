@@ -23,19 +23,25 @@ export interface IBookmarks {
   /**
    * Determines bookmark existence in CRIP system. Using local storage as proxy
    * to avoid too many requests.
-   * @param {Bookmark} bookmark
+   * @param  {Bookmark} bookmark
+   * @return {Promise<boolean>}
    */
   isRegistered(bookmark: Bookmark): Promise<boolean>
+
+  /**
+   * Save bookmark in api.
+   * @param  {Bookmark} bookmark
+   * @return {Promise<void>}
+   */
+  save(bookmark: Bookmark): Promise<void>
 }
 
 export class Bookmarks extends Service implements IBookmarks {
-  private readonly storage: IStorageService
-
   /**
    * Construct Bookmarks service instance.
    * @param {IStorageService} storage
    */
-  constructor(storage: IStorageService) {
+  constructor(private storage: IStorageService) {
     super('Services.Bookmarks')
     this.storage = storage
   }
@@ -48,9 +54,8 @@ export class Bookmarks extends Service implements IBookmarks {
   async getChildren(parentId: string): Promise<Bookmark[]> {
     let bookmarkNodes = await bookmarks.getChildren(parentId)
     let bookmarkList = bookmarkNodes.map(node => new Bookmark(node))
-    let sorted = bookmarkList.sort(b => b.index)
 
-    return sorted
+    return bookmarkList.sort(b => b.index)
   }
 
   /**
@@ -77,7 +82,7 @@ export class Bookmarks extends Service implements IBookmarks {
    * @param {Bookmark} bookmark
    */
   async isRegistered(bookmark: Bookmark): Promise<boolean> {
-    if(this.storage.hasUrl(bookmark.url)) {
+    if (this.storage.hasUrl(bookmark.url)) {
       return this.storage.getUrlState(bookmark.url)
     }
 
@@ -85,5 +90,18 @@ export class Bookmarks extends Service implements IBookmarks {
     this.storage.addUrl(bookmark.url, state)
 
     return state
+  }
+
+  /**
+   * Save bookmark in api.
+   * @param  {Bookmark} bookmark
+   * @return {Promise<void>}
+   */
+  async save(bookmark: Bookmark): Promise<void> {
+    let tree = await this.getTree(bookmark.parentId)
+    let tags = tree.map(b => b.title)
+
+    if (await bookmarks.save({title: bookmark.title, url: bookmark.url}, tags))
+      this.storage.addUrl(bookmark.url, true)
   }
 }

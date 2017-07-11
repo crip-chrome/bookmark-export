@@ -1,7 +1,7 @@
 <template>
   <div class="login container">
     <div class="row">
-      <div class="col-sm-8 col-sm-offset-2">
+      <div class="col-sm-12">
         <div class="panel panel-primary">
           <div class="panel-heading">Login</div>
           <form class="panel-body form-horizontal" @submit.prevent="login">

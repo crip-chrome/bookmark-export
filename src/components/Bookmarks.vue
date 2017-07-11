@@ -21,7 +21,7 @@
         <tbody>
         <tr
             v-for="bookmark in bookmarks" :key="bookmark.id"
-            @click="open(bookmark)"
+            @click="open(bookmark)" :class="getClass(bookmark)"
         >
           <td>{{ bookmark.id }}</td>
           <td>{{ date(bookmark.dateAdded) }}</td>
@@ -39,11 +39,10 @@
   import {Component, Watch} from 'vue-property-decorator'
 
   import * as routes from '../router/routes'
+  import Bookmark from '../models/Bookmark'
   import Breadcrumb from './Breadcrumb.vue'
   import router from '../router'
   import {bookmarks} from '../services'
-
-  import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode
 
   @Component({
     name: 'bookmarks',
@@ -54,7 +53,7 @@
     /**
      * Collection of bookmark nodes in current page.
      */
-    bookmarks: Array<BookmarkTreeNode> = []
+    bookmarks: Array<Bookmark> = []
 
     /**
      * Hook in to vue lifecycle and start load bookmarks while component is
@@ -83,10 +82,17 @@
 
     /**
      * Open bookmark.
-     * @param {BookmarkTreeNode} bookmark
+     * @param {Bookmark} bookmark
+     * @return {Promise<void>}
      */
-    open(bookmark: BookmarkTreeNode) {
-      if (bookmark.url) return
+    open(bookmark: Bookmark) {
+      if (bookmark.url) {
+        if(bookmark.isRegistered){
+          return
+        }
+        bookmark.isRegistered = true
+        return bookmarks.save(bookmark)
+      }
       router.push(routes.bookmarks(bookmark.id))
     }
 
@@ -97,6 +103,21 @@
      */
     async getBookmarks(parentId = '1'): Promise<void> {
       this.bookmarks = await bookmarks.getChildren(parentId)
+    }
+
+    /**
+     * Get class for bookmark row.
+     * @param  {Bookmark} bookmark
+     * @return {Array<string>}
+     */
+    getClass(bookmark: Bookmark): string[] {
+      if(bookmark.isFolder) return []
+
+      if (bookmark.isRegistered) {
+        return ['success']
+      }
+
+      return ['danger']
     }
 
     /**

@@ -71,7 +71,7 @@ export default class Bookmark implements BookmarkTreeNode {
     })
 
     this.isRegistered = false
-    this.checkExistence()
+    this.checkExistence().then(() => 1)
   }
 
   /**
@@ -79,7 +79,7 @@ export default class Bookmark implements BookmarkTreeNode {
    * @returns {boolean}
    */
   get isFolder() {
-    return !!this.url
+    return !this.url
   }
 
   /**

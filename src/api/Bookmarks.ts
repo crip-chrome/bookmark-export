@@ -1,6 +1,14 @@
+import axios, {AxiosResponse} from 'axios'
+
 import Service from '../services/Service'
+import {auth} from '../services'
 
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
+
+interface IBookmarkData {
+  title: string
+  url: string
+}
 
 export interface IBookmarks {
   /**
@@ -23,11 +31,37 @@ export interface IBookmarks {
    * @return {Promise<boolean>}
    */
   isRegistered(url: string): Promise<boolean>
+
+  /**
+   * Save bookmark on the server.
+   * @param {IBookmarkData} bookmark
+   * @param {Array<String>} tags
+   * @return {Promise<boolean>}
+   */
+  save(bookmark: IBookmarkData, tags: string[]): Promise<boolean>
 }
 
 export class Bookmarks extends Service implements IBookmarks {
+  /**
+   * Base URL of auth API.
+   */
+  private readonly url: string
+
+  /**
+   * Construct Bookmarks api service instance.
+   */
   constructor() {
     super('Api.Bookmarks')
+    // TODO: get URL value from configuration as it may change in any moment
+    this.url = 'http://href.dev/api'
+  }
+
+  get tokenHeader() {
+    return {
+      headers: {
+        Authorization: `Bearer ${auth.token}`
+      }
+    }
   }
 
   /**
@@ -75,7 +109,35 @@ export class Bookmarks extends Service implements IBookmarks {
    * @param  {String} url
    * @return {Promise<boolean>}
    */
-  isRegistered(url: string): Promise<boolean> {
-    return undefined
+  async isRegistered(url: string): Promise<boolean> {
+    try {
+      let requestUrl = `${this.url}/href/exists?url=${encodeURIComponent(url)}`
+      let response = await axios.get(requestUrl, this.tokenHeader) as AxiosResponse
+
+      this.log.log('isRegistered', {response, url})
+
+      return response.data
+    } catch (error) {
+      return false
+    }
+  }
+
+  /**
+   * Save bookmark on the server.
+   * @param {IBookmarkData} bookmark
+   * @param {Array<String>} tags
+   * @return {Promise<boolean>}
+   */
+  async save(bookmark: IBookmarkData, tags: string[]): Promise<boolean> {
+    try {
+      let requestUrl = `${this.url}/href/create`
+      let data = {...bookmark, tags, visible: true}
+      let response = await axios.post(requestUrl, data, this.tokenHeader)
+
+      this.log.log('isRegistered', {response, requestUrl})
+      return true
+    } catch (error) {
+      return false
+    }
   }
 }

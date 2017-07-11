@@ -6,8 +6,13 @@ export interface IStorageService {
   addUrl(url: string, value: boolean)
 }
 
+interface UrlInfo {
+  exists: boolean
+  addedAt: number
+}
+
 interface UrlMap {
-  [s: string]: boolean
+  [s: string]: UrlInfo
 }
 
 export class LocalStorage implements IStorageService {
@@ -16,7 +21,7 @@ export class LocalStorage implements IStorageService {
 
   /**
    * Save token in to local storage.
-   * @param {string} token
+   * @param {String} token
    */
   saveToken(token: string): void {
     localStorage.setItem(this.tokenKey, token)
@@ -24,7 +29,7 @@ export class LocalStorage implements IStorageService {
 
   /**
    * Get token from local storage.
-   * @return {string}
+   * @return {String}
    */
   getToken(): string {
     let token = localStorage.getItem(this.tokenKey)
@@ -33,19 +38,46 @@ export class LocalStorage implements IStorageService {
     throw new Error('Token is not provided')
   }
 
+  /**
+   * Check url existence in storage.
+   * @param   {String} url
+   * @returns {Boolean}
+   */
   hasUrl(url: string): boolean {
     let urls = this.getUrls()
-    return typeof urls[url] !== 'undefined'
+
+    if (typeof urls[url] !== 'undefined') {
+      let now = new Date().getTime()
+      let added = urls[url].addedAt
+
+      return now - added > 100000
+    }
+
+    return false
   }
 
+  /**
+   * Get url state from storage.
+   * @param   {String} url
+   * @returns {Boolean}
+   */
   getUrlState(url: string): boolean {
     let urls = this.getUrls()
-    return urls[url]
+    return urls[url].exists
   }
 
-  addUrl(url: string, value: boolean) {
+  /**
+   * Add url to storage.
+   * @param   {String} url
+   * @param   {Boolean} value
+   * @returns {void}
+   */
+  addUrl(url: string, value: boolean): void {
     let urls = this.getUrls()
-    urls[url] = value
+    urls[url] = {
+      exists: value,
+      addedAt: new Date().getTime(),
+    }
     let urlsStr = JSON.stringify(urls)
 
     localStorage.setItem(this.urlsKey, urlsStr)
@@ -61,6 +93,6 @@ export class LocalStorage implements IStorageService {
       return JSON.parse(localStorage.getItem(this.urlsKey)) as UrlMap
     }
 
-    return {} as UrlMap
+    return {}
   }
 }
