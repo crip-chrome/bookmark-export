@@ -19,13 +19,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr
-            v-for="bookmark in bookmarks" :key="bookmark.id"
-            @click="open(bookmark)" :class="getClass(bookmark)"
-        >
+        <tr v-for="bookmark in bookmarks" :key="bookmark.id">
           <td>{{ bookmark.id }}</td>
-          <td>{{ date(bookmark.dateAdded) }}</td>
-          <td class="table-wide">{{ bookmark.title }}</td>
+          <td>
+            <i class="fa fa-circle" :class="getClass(bookmark)"></i>
+            {{ date(bookmark.dateAdded) }}
+          </td>
+          <td class="table-wide">
+            <a @click.prevent="open(bookmark)" href class="open">
+              {{ bookmark.title }}
+            </a>
+          </td>
           <td class="table-wide">{{ bookmark.url }}</td>
         </tr>
         </tbody>
@@ -87,7 +91,7 @@
      */
     open(bookmark: Bookmark) {
       if (bookmark.url) {
-        if(bookmark.isRegistered){
+        if (bookmark.isRegistered) {
           return
         }
         bookmark.isRegistered = true
@@ -111,7 +115,7 @@
      * @return {Array<string>}
      */
     getClass(bookmark: Bookmark): string[] {
-      if(bookmark.isFolder) return []
+      if (bookmark.isFolder) return ['hidden']
 
       if (bookmark.isRegistered) {
         return ['success']
@@ -132,7 +136,9 @@
   }
 </script>
 
-<style>
+<style lang="scss">
+  @import "./../scss/variables";
+
   .bookmarks {
     margin: -1px;
   }
@@ -146,5 +152,22 @@
 
   .breadcrumb-item {
     color: white;
+  }
+
+  .fa {
+    &.danger {
+      color: #d9534f;
+    }
+
+    &.success {
+      color: #5cb85c;
+    }
+  }
+
+  .open {
+    @extend .table-wide;
+    display: block;
+    height: 100%;
+    width: 100%;
   }
 </style>
