@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Loading from '../components/Loading.vue'
 import Login from '../components/Login.vue'
 import Bookmarks from '../components/Bookmarks.vue'
+import Config from '../components/Configurations.vue'
 
 Vue.use(Router)
 
@@ -21,6 +22,10 @@ export default new Router({
       path: '/bookmarks/:page',
       name: 'bookmarks',
       component: Bookmarks
+    }, {
+      path: '/config',
+      name: 'config',
+      component: Config
     },
   ]
 })

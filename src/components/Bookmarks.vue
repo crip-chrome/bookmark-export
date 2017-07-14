@@ -2,6 +2,9 @@
   <div class="panel bookmarks panel-primary">
     <div class="panel-heading">
       <span>Bookmarks</span>
+      <router-link :to="configRoute" class="pull-right">
+        <i class="fa fa-cogs white"></i>
+      </router-link>
     </div>
 
     <div class="panel-body">
@@ -62,8 +65,15 @@
 
     /**
      * Collection of bookmark nodes in current page.
+     * @type {Array}
      */
     bookmarks: Array<Bookmark> = []
+
+    /**
+     * Configuration component route.
+     * @type {Location}
+     */
+    configRoute = routes.config()
 
     /**
      * Hook in to vue lifecycle and start load bookmarks while component is
@@ -76,6 +86,7 @@
 
     /**
      * Hook in to vue lifecycle and log initialization completed state.
+     * @return {void}
      */
     mounted() {
       console.log('Bookmarks component mounted.')
@@ -92,7 +103,7 @@
 
     /**
      * Open bookmark.
-     * @param {Bookmark} bookmark
+     * @param  {Bookmark} bookmark
      * @return {Promise<void>}
      */
     open(bookmark: Bookmark) {
@@ -187,6 +198,10 @@
 
     &.gray {
       color: $second-color;
+    }
+
+    &.white {
+      color: $footer-text-color;
     }
   }
 

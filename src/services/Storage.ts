@@ -4,6 +4,9 @@ export interface IStorageService {
   hasUrl(url: string): boolean
   getUrlState(url: string): boolean
   addUrl(url: string, value: boolean)
+
+  saveConfigUrl(url: string): void
+  getConfigUrl(): string
 }
 
 interface UrlInfo {
@@ -18,6 +21,7 @@ interface UrlMap {
 export class LocalStorage implements IStorageService {
   private readonly tokenKey = 'crip_bookmark_token'
   private readonly urlsKey = 'crip_bookmark_urls'
+  private readonly confUrlKey = 'crip_bookmark_conf_url'
 
   /**
    * Save token in to local storage.
@@ -81,6 +85,26 @@ export class LocalStorage implements IStorageService {
     let urlsStr = JSON.stringify(urls)
 
     localStorage.setItem(this.urlsKey, urlsStr)
+  }
+
+  /**
+   * Save configuration url in local storage.
+   * @param  {String} url
+   * @return {void}
+   */
+  saveConfigUrl(url: string): void {
+    localStorage.setItem(this.confUrlKey, url)
+  }
+
+  /**
+   * Get configuration url from local storage.
+   * @return {String}
+   */
+  getConfigUrl(): string {
+    let token = localStorage.getItem(this.confUrlKey)
+    if (token) return token
+
+    return 'http://hrefs.crip.lv'
   }
 
   private hasUrlStr(): boolean {

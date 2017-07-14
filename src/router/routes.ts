@@ -11,3 +11,7 @@ export function login(): Location {
 export function bookmarks(page: string): Location {
   return {name: 'bookmarks', params: {page}}
 }
+
+export function config(): Location {
+  return {name: 'config'}
+}
