@@ -23,7 +23,12 @@
             <form-group
                 control-class="col-sm-8 col-md-offset-3 col-sm-offset-4"
             >
-              <input type="submit" value="Login" class="btn btn-primary"/>
+              <button type="submit" class="btn btn-primary">
+                Login
+                <i
+                    v-if="loading" class="fa fa-spinner fa-pulse fa-3x fa-fw"
+                ></i>
+              </button>
             </form-group>
           </form>
         </div>
@@ -48,19 +53,42 @@
       console.log('Login component mounted.')
     }
 
+    /**
+     * Form fields.
+     * @type {Object}
+     */
     form = {
       email: '',
       password: '',
     }
 
+    /**
+     * Collection of the errors.
+     * @type {Array<String>}
+     */
     errors = []
 
+    /**
+     * Is current form loading at this moment.
+     * @type {Boolean}
+     */
+    loading = false
+
+    /**
+     * Authorize user in CRIP system.
+     * @returns {Promise.<void>}
+     */
     async login() {
+      this.loading = true
+      this.errors = []
+
       try {
         await auth.authorize(this.form)
       } catch (errors) {
         this.errors = ['These credentials do not match our records.']
       }
+
+      this.loading = false
     }
   }
 </script>
@@ -68,5 +96,9 @@
 <style scoped>
   .login {
     padding-top: 20px;
+  }
+
+  .fa {
+    font-size: 19px;
   }
 </style>

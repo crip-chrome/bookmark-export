@@ -26,7 +26,13 @@
             {{ date(bookmark.dateAdded) }}
           </td>
           <td class="table-wide">
-            <a @click.prevent="open(bookmark)" href class="open">
+            <span v-if="bookmark.isRegistered">
+              {{ bookmark.title }}
+            </span>
+            <a
+                @click.prevent="open(bookmark)" href class="open"
+                :title="title(bookmark)" v-else
+            >
               {{ bookmark.title }}
             </a>
           </td>
@@ -94,6 +100,7 @@
         if (bookmark.isRegistered) {
           return
         }
+
         bookmark.isRegistered = true
         return bookmarks.save(bookmark)
       }
@@ -125,6 +132,17 @@
     }
 
     /**
+     * Get title for a bookmark 'a' tag.
+     * @param  {Bookmark} bookmark
+     * @return {String}
+     */
+    title(bookmark: Bookmark): string {
+      return bookmark.isFolder ?
+          'Open' :
+          'Send to server'
+    }
+
+    /**
      * Watch route page change and mutate data.
      * @param  {String} page
      * @return {Promise<void>}
@@ -143,8 +161,11 @@
     margin: -1px;
   }
 
-  .table-wide {
+  td.table-wide {
     max-width: 160px;
+  }
+
+  .table-wide {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
