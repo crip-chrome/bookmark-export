@@ -100,8 +100,13 @@ export class Bookmarks extends Service implements IBookmarks {
   async save(bookmark: Bookmark): Promise<void> {
     let tree = await this.getTree(bookmark.parentId)
     let tags = tree.map(b => b.title)
+    let data = {
+      title: bookmark.title,
+      url: bookmark.url,
+      date: bookmark.dateAdded
+    }
 
-    if (await bookmarks.save({title: bookmark.title, url: bookmark.url}, tags))
+    if (await bookmarks.save(data, tags))
       this.storage.addUrl(bookmark.url, true)
   }
 }

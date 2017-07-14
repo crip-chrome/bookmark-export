@@ -8,6 +8,7 @@ import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 interface IBookmarkData {
   title: string
   url: string
+  date: number
 }
 
 export interface IBookmarks {
@@ -131,7 +132,7 @@ export class Bookmarks extends Service implements IBookmarks {
   async save(bookmark: IBookmarkData, tags: string[]): Promise<boolean> {
     try {
       let requestUrl = `${this.url}/href/create`
-      let data = {...bookmark, tags, visible: true}
+      let data = {...bookmark, tags}
       let response = await axios.post(requestUrl, data, this.tokenHeader)
 
       this.log.log('isRegistered', {response, requestUrl})

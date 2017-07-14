@@ -22,7 +22,7 @@
         <tr v-for="bookmark in bookmarks" :key="bookmark.id">
           <td>{{ bookmark.id }}</td>
           <td>
-            <i class="fa fa-circle" :class="getClass(bookmark)"></i>
+            <i class="fa" :class="getClass(bookmark)"></i>
             {{ date(bookmark.dateAdded) }}
           </td>
           <td class="table-wide">
@@ -104,6 +104,7 @@
         bookmark.isRegistered = true
         return bookmarks.save(bookmark)
       }
+
       router.push(routes.bookmarks(bookmark.id))
     }
 
@@ -122,13 +123,13 @@
      * @return {Array<string>}
      */
     getClass(bookmark: Bookmark): string[] {
-      if (bookmark.isFolder) return ['hidden']
+      if (bookmark.isFolder) return ['fa-folder', 'gray']
 
       if (bookmark.isRegistered) {
-        return ['success']
+        return ['fa-circle', 'success']
       }
 
-      return ['danger']
+      return ['fa-circle', 'danger']
     }
 
     /**
@@ -182,6 +183,10 @@
 
     &.success {
       color: #5cb85c;
+    }
+
+    &.gray {
+      color: $second-color;
     }
   }
 
