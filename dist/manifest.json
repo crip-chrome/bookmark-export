@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Chrome bookmark export tool",
-  "description": "This extension exports bookmarks to your API endpoint",
+  "description": "Exports bookmarks to http://hrefs.crip.lv with one click",
   "version": "0.1.1",
   "browser_action": {
     "default_icon": "logo.png",

@@ -1,8 +1,9 @@
 <template>
   <div class="panel bookmarks panel-primary">
     <div class="panel-heading">
+      <img src="logo.png" alt="CRIP Logo" class="crip-logo"/>
       <span>Bookmarks</span>
-      <router-link :to="configRoute" class="pull-right">
+      <router-link :to="configRoute" class="pull-right" title="Settings">
         <i class="fa fa-cogs white"></i>
       </router-link>
     </div>
@@ -210,5 +211,20 @@
     display: block;
     height: 100%;
     width: 100%;
+  }
+
+  .crip-logo {
+    margin: -10px 0 -10px -10px;
+    padding-right: 5px;
+    width: 36px;
+  }
+
+  .panel-heading .pull-right {
+    margin-top: -7px;
+    padding: 7px;
+
+    &:hover .fa {
+      color: $link-color-inverse;
+    }
   }
 </style>
