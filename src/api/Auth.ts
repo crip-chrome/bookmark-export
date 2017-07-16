@@ -1,6 +1,7 @@
 import axios, {AxiosResponse} from 'axios'
 
 import Service from '../services/Service'
+import {storage} from '../services'
 
 export interface ICredentials {
   /**
@@ -48,8 +49,7 @@ export class Auth extends Service implements IAuth {
    */
   constructor() {
     super('Api.Auth')
-    // TODO: get URL value from configuration as it may change in any moment
-    this.url = 'http://href.dev/api'
+    this.url = storage.getConfigUrl()
   }
 
   /**

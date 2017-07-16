@@ -1,7 +1,7 @@
 import axios, {AxiosResponse} from 'axios'
 
 import Service from '../services/Service'
-import {auth} from '../services'
+import {auth, storage} from '../services'
 
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 
@@ -53,8 +53,7 @@ export class Bookmarks extends Service implements IBookmarks {
    */
   constructor() {
     super('Api.Bookmarks')
-    // TODO: get URL value from configuration as it may change in any moment
-    this.url = 'http://href.dev/api'
+    this.url = storage.getConfigUrl()
   }
 
   get tokenHeader() {
