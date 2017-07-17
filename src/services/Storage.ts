@@ -2,7 +2,7 @@ export interface IStorageService {
   saveToken(token: string): void
   getToken(): string
   hasUrl(url: string): boolean
-  getUrlState(url: string): boolean
+  getUrlState(url: string): Promise<boolean>
   addUrl(url: string, value: boolean)
 
   saveConfigUrl(url: string): void
@@ -54,6 +54,12 @@ export class LocalStorage implements IStorageService {
       let now = new Date().getTime()
       let added = urls[url].addedAt
 
+      console.log({
+        now,
+        added,
+        minus: now - added,
+        isoutdated: now - added > 100000
+      })
       return now - added > 100000
     }
 
@@ -65,9 +71,11 @@ export class LocalStorage implements IStorageService {
    * @param   {String} url
    * @returns {Boolean}
    */
-  getUrlState(url: string): boolean {
-    let urls = this.getUrls()
-    return urls[url].exists
+  async getUrlState(url: string): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      let urls = this.getUrls()
+      resolve(urls[url].exists)
+    })
   }
 
   /**
@@ -104,7 +112,7 @@ export class LocalStorage implements IStorageService {
     let token = localStorage.getItem(this.confUrlKey)
     if (token) return token
 
-    return 'http://hrefs.crip.lv'
+    return 'http://hrefs.crip.lv/api'
   }
 
   private hasUrlStr(): boolean {

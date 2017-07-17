@@ -1,39 +1,38 @@
 <template>
-  <div class="login container">
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="panel panel-primary">
-          <div class="panel-heading">Login</div>
-          <form class="panel-body form-horizontal" @submit.prevent="login">
-            <form-group :errors="errors" label="Email" target="email">
-              <input
-                  type="email" name="email" id="email" class="form-control"
-                  v-model="form.email" placeholder="Email address" required
-              />
-            </form-group>
-
-            <form-group label="Password" target="password">
-              <input
-                  type="password" name="password" id="password"
-                  class="form-control" v-model="form.password"
-                  placeholder="Password" required
-              />
-            </form-group>
-
-            <form-group
-                control-class="col-sm-8 col-md-offset-3 col-sm-offset-4"
-            >
-              <button type="submit" class="btn btn-primary">
-                Login
-                <i
-                    v-if="loading" class="fa fa-spinner fa-pulse fa-3x fa-fw"
-                ></i>
-              </button>
-            </form-group>
-          </form>
-        </div>
-      </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <span>Login</span>
+      <router-link :to="configRoute" class="pull-right" title="Settings">
+        <i class="fa fa-cogs white"></i>
+      </router-link>
     </div>
+    <form class="panel-body form-horizontal" @submit.prevent="login">
+      <form-group :errors="errors" label="Email" target="email">
+        <input
+            type="email" name="email" id="email" class="form-control"
+            v-model="form.email" placeholder="Email address" required
+        />
+      </form-group>
+
+      <form-group label="Password" target="password">
+        <input
+            type="password" name="password" id="password"
+            class="form-control" v-model="form.password"
+            placeholder="Password" required
+        />
+      </form-group>
+
+      <form-group
+          control-class="col-sm-8 col-md-offset-3 col-sm-offset-4"
+      >
+        <button type="submit" class="btn btn-primary">
+          Login
+          <i
+              v-if="loading" class="fa fa-spinner fa-pulse fa-3x fa-fw"
+          ></i>
+        </button>
+      </form-group>
+    </form>
   </div>
 </template>
 
@@ -41,6 +40,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
 
+  import * as routes from '../router/routes'
   import FormGroup from './forms/FormGroup.vue'
   import {auth} from '../services'
 
@@ -61,6 +61,12 @@
       email: '',
       password: '',
     }
+
+    /**
+     * Configuration component route.
+     * @type {Location}
+     */
+    configRoute = routes.config()
 
     /**
      * Collection of the errors.

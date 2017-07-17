@@ -1,7 +1,7 @@
 import axios, {AxiosResponse} from 'axios'
 
 import Service from '../services/Service'
-import {storage} from '../services'
+import * as Storage from '../services/Storage'
 
 export interface ICredentials {
   /**
@@ -49,6 +49,7 @@ export class Auth extends Service implements IAuth {
    */
   constructor() {
     super('Api.Auth')
+    let storage = new Storage.LocalStorage()
     this.url = storage.getConfigUrl()
   }
 

@@ -1,7 +1,7 @@
 import axios, {AxiosResponse} from 'axios'
 
 import Service from '../services/Service'
-import {auth, storage} from '../services'
+import * as Storage from '../services/Storage'
 
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 
@@ -44,7 +44,14 @@ export interface IBookmarks {
 
 export class Bookmarks extends Service implements IBookmarks {
   /**
+   * Local storage instance.
+   * @type IStorageService
+   */
+  private readonly storage: Storage.IStorageService
+
+  /**
    * Base URL of auth API.
+   * @type String
    */
   private readonly url: string
 
@@ -53,13 +60,18 @@ export class Bookmarks extends Service implements IBookmarks {
    */
   constructor() {
     super('Api.Bookmarks')
-    this.url = storage.getConfigUrl()
+    this.storage = new Storage.LocalStorage()
+    this.url = this.storage.getConfigUrl()
   }
 
+  /**
+   * Get token header object for a request.
+   * @returns {{headers: {Authorization: string}}}
+   */
   get tokenHeader() {
     return {
       headers: {
-        Authorization: `Bearer ${auth.token}`
+        Authorization: `Bearer ${this.storage.getToken()}`
       }
     }
   }

@@ -35,6 +35,12 @@ export interface IAuthService {
    * @return {Promise<boolean>}
    */
   authorize(credentials: ICredentials): Promise<boolean>
+
+  /**
+   * Check user authorization status.
+   * @return {Promise<boolean>}
+   */
+  isAuthorized(): Promise<boolean>
 }
 
 export class Auth extends Service implements IAuthService {
@@ -53,7 +59,7 @@ export class Auth extends Service implements IAuthService {
    * Authorised user token.
    * @return {String}
    */
-  get token() {
+  public get token() {
     return this.storage.getToken()
   }
 
@@ -61,7 +67,7 @@ export class Auth extends Service implements IAuthService {
    * Check user authorization state and redirect to correct route.
    * @return {Promise<boolean>}
    */
-  async check(): Promise<boolean> {
+  public async check(): Promise<boolean> {
     const isAuthorized = await this.isAuthorized()
 
     if (isAuthorized) {
@@ -78,7 +84,7 @@ export class Auth extends Service implements IAuthService {
    * @param  {ICredentials} credentials
    * @return {Promise<boolean>}
    */
-  async authorize(credentials: ICredentials): Promise<boolean> {
+  public async authorize(credentials: ICredentials): Promise<boolean> {
     let response = await auth.authenticate(credentials)
     let isToken = typeof response === 'string'
 
@@ -97,7 +103,7 @@ export class Auth extends Service implements IAuthService {
    * Check user authorization status.
    * @return {Promise<boolean>}
    */
-  private async isAuthorized(): Promise<boolean> {
+  public async isAuthorized(): Promise<boolean> {
     try {
       const token = this.storage.getToken()
       let isAuthorized = await this.validateToken(token)

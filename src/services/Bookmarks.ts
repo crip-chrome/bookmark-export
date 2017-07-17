@@ -83,7 +83,7 @@ export class Bookmarks extends Service implements IBookmarks {
    */
   async isRegistered(bookmark: Bookmark): Promise<boolean> {
     if (this.storage.hasUrl(bookmark.url)) {
-      return this.storage.getUrlState(bookmark.url)
+      return await this.storage.getUrlState(bookmark.url)
     }
 
     const state = await bookmarks.isRegistered(bookmark.url)

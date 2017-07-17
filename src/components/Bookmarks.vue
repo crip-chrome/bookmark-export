@@ -188,24 +188,6 @@
     color: white;
   }
 
-  .fa {
-    &.danger {
-      color: #d9534f;
-    }
-
-    &.success {
-      color: #5cb85c;
-    }
-
-    &.gray {
-      color: $second-color;
-    }
-
-    &.white {
-      color: $footer-text-color;
-    }
-  }
-
   .open {
     @extend .table-wide;
     display: block;
@@ -217,14 +199,5 @@
     margin: -10px 0 -10px -10px;
     padding-right: 5px;
     width: 36px;
-  }
-
-  .panel-heading .pull-right {
-    margin-top: -7px;
-    padding: 7px;
-
-    &:hover .fa {
-      color: $link-color-inverse;
-    }
   }
 </style>
