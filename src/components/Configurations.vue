@@ -41,7 +41,7 @@
   })
   export default class Configurations extends Vue {
     async mounted() {
-      console.log('Configurations component mounted.')
+      //console.log('Configurations component mounted.')
       this.form.url = storage.getConfigUrl() as ""
       this.isAuthorized = await auth.isAuthorized()
     }

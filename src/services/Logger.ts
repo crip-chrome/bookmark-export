@@ -26,7 +26,7 @@ export class Logger implements ILogger {
   }
 
   log(method: string, ...args: Array<any>): void {
-    console.log.apply(console, [`${this.instanceName}.${method}`, ...args])
+    //console.log.apply(console, [`${this.instanceName}.${method}`, ...args])
   }
 
   info(...args: Array<string>): void {

@@ -1,5 +1,5 @@
 <template>
-  <div class="panel panel-primary">
+  <div class="panel panel-primary login">
     <div class="panel-heading">
       <span>Login</span>
       <router-link :to="configRoute" class="pull-right" title="Settings">
@@ -50,7 +50,7 @@
   })
   export default class Login extends Vue {
     mounted() {
-      console.log('Login component mounted.')
+      //console.log('Login component mounted.')
     }
 
     /**
@@ -101,7 +101,7 @@
 
 <style scoped>
   .login {
-    padding-top: 20px;
+    margin: -1px;
   }
 
   .fa {

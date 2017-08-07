@@ -107,7 +107,7 @@ export class Auth extends Service implements IAuthService {
     try {
       const token = this.storage.getToken()
       let isAuthorized = await this.validateToken(token)
-      console.log('Services.Auth.isAuthorized()', {isAuthorized, token})
+      //console.log('Services.Auth.isAuthorized()', {isAuthorized, token})
 
       return isAuthorized
     } catch (error) {

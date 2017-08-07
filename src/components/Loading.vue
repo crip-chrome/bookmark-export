@@ -17,7 +17,7 @@
   })
   export default class Loading extends Vue {
     mounted() {
-      console.log('loading component mounted.')
+      //console.log('loading component mounted.')
     }
   }
 </script>

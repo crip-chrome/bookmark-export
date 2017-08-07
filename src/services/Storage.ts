@@ -54,12 +54,12 @@ export class LocalStorage implements IStorageService {
       let now = new Date().getTime()
       let added = urls[url].addedAt
 
-      console.log({
+      /*console.log({
         now,
         added,
         minus: now - added,
         isoutdated: now - added > 100000
-      })
+      })*/
       return now - added > 100000
     }
 

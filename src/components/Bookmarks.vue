@@ -90,7 +90,7 @@
      * @return {void}
      */
     mounted() {
-      console.log('Bookmarks component mounted.')
+      //console.log('Bookmarks component mounted.')
     }
 
     /**
